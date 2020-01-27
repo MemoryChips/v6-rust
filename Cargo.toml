@@ -7,7 +7,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+log = "0.4.8"
+simple_logger = "1.4.0"
+rand = "0.7.3"
 
+# this may not be needed for examples
 [[example]]
 name = "sandbox"
 path = "examples/sandbox/main.rs"
