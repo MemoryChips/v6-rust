@@ -1,11 +1,5 @@
-// use simple_logger::{info, trace, warn};
 #[macro_use]
 extern crate log;
-// use log::info;
-// use log::{info, trace, warn};
-// extern crate rand;
-// use rand::prelude::*;
-// extern crate simple_logger;
 
 pub mod v6_core {
   // #[allow(dead_code)]
@@ -13,7 +7,6 @@ pub mod v6_core {
     pub app_name: String,
   }
   impl App {
-    // #[allow(dead_code)]
     pub fn run(&self) {
       println!("secret number: {}", rand::random::<f64>());
       info!("{} is running", self.app_name);
