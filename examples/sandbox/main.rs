@@ -5,8 +5,14 @@ extern crate log;
 extern crate simple_logger;
 
 fn main() {
-  // simple_logger::init_with_level(log::Level::Warn).unwrap();
   simple_logger::init_with_level(log::Level::Info).unwrap();
+  // match simple_logger::init_with_level(log::Level::Info) {
+  //   // Ok(n) => n,
+  //   // Err(e) => 0,
+  //   Ok(n) => println!("Logger setup OK code n: {:?}", n),
+  //   Err(e) => println!("Error setting up logger: {:?}", e),
+  // };
+
   warn!("warn from main example");
   info!("info from main example");
   let _t = timer::Timer::new("Main Example");
