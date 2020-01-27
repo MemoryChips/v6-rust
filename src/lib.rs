@@ -15,7 +15,7 @@ pub mod v6_core {
 mod tests {
   use super::v6_core::App;
   #[test]
-  fn it_works() {
+  fn lib_works() {
     let _app = App {
       app_name: "The app".to_string(),
     };
