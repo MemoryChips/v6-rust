@@ -11,5 +11,7 @@ fn main() {
   info!("info from main example");
   let _t = timer::Timer::new("Main Example");
   let mut app = App::new("The app".to_string());
+  info!("App is running: {}", app.is_running());
   app.run();
+  info!("App is now running: {}", app.is_running());
 }

@@ -10,9 +10,9 @@ pub mod v6_core {
   impl App {
     pub fn run(&mut self) {
       self.running = true;
-      println!("secret number: {}", rand::random::<f64>());
+      info!("secret number: {}", rand::random::<f64>());
       info!("{} is running: {}", self.app_name, self.is_running());
-      println!("App name: {}", self.app_name)
+      info!("App name: {}", self.app_name)
     }
     pub fn is_running(&self) -> bool {
       self.running
