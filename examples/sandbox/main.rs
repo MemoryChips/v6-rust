@@ -10,8 +10,6 @@ fn main() {
   warn!("warn from main example");
   info!("info from main example");
   let _t = timer::Timer::new("Main Example");
-  let app = App {
-    app_name: "The app".to_string(),
-  };
+  let mut app = App::new("The app".to_string());
   app.run();
 }
