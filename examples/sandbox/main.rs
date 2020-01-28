@@ -9,7 +9,7 @@ fn main() {
   // match simple_logger::init_with_level(log::Level::Info) {
   //   // Ok(n) => n,
   //   // Err(e) => 0,
-  //   Ok(n) => println!("Logger setup OK code n: {:?}", n),
+  //   Ok(n) => println!("Logger setup OK"),
   //   Err(e) => println!("Error setting up logger: {:?}", e),
   // };
 

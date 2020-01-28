@@ -10,6 +10,10 @@ edition = "2018"
 log = "0.4.8"
 simple_logger = "1.4.0"
 rand = "0.7.3"
+glfw = "0.35.0"
+
+# [dependencies.glfw]
+# git = "https://github.com/bjz/glfw-rs.git"
 
 # this may not be needed for examples
 [[example]]
