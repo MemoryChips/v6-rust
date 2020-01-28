@@ -10,9 +10,16 @@ cargo run --example sandbox
 
 ## Setup
 
+### Examples
+
+See glfw-rs examples here
+[glfw-rs examples](https://github.com/PistonDevelopers/glfw-rs)
+
 ### GLFW
 
-Setup here: \$HOME/Training/cpp/glfw
+[Compile and install GLFW 3.x](http://www.glfw.org/docs/latest/compile.html)
+
+Setup here: \$HOME/Training/cpp/glfw.
 
 ```bash
 git clone git@github.com:glfw/glfw.git
