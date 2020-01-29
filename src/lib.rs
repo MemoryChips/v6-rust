@@ -6,7 +6,8 @@ extern crate glfw;
 
 pub mod v6_core {
   // use std::sync::mpsc::Receiver<f64, glfw::WindowEvent> as WindowEvent
-  use std::sync::mpsc::Receiver as WindowEventRcvr;
+  // use std::sync::mpsc::Receiver as WindowEventRcvr;
+  type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
   #[allow(dead_code)] // FIXME Remove when possible
   pub struct App {
     pub app_name: String,
@@ -16,7 +17,7 @@ pub mod v6_core {
     minimized: bool,
     // layerStack: LayerStack,
     last_frame_time_sec: f64,
-    events: WindowEventRcvr<(f64, glfw::WindowEvent)>,
+    events: WindowEventRcvr,
     glfw: glfw::Glfw,
   }
   impl App {
@@ -61,11 +62,7 @@ pub mod v6_core {
       };
       app
     }
-    fn glfw_init() -> (
-      glfw::Glfw,
-      glfw::Window,
-      WindowEventRcvr<(f64, glfw::WindowEvent)>,
-    ) {
+    fn glfw_init() -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
       // let glfw: Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
       let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
       let (window, window_events) = glfw
