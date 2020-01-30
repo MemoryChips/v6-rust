@@ -7,8 +7,10 @@ extern crate gl;
 
 mod timer;
 // use timer::Timer;
+mod shader;
 
 pub mod v6_core {
+  use super::shader;
   use super::timer::Timer;
   use gl::types::*;
   use std::ffi::CString;
@@ -38,71 +40,6 @@ void main() {
     out_color = vec4(1.0, 1.0, 0.0, 1.0);
 }";
 
-  fn compile_shader(src: &str, ty: GLenum) -> GLuint {
-    let shader: GLuint;
-    unsafe {
-      shader = gl::CreateShader(ty);
-      // Attempt to compile the shader
-      let c_str = CString::new(src.as_bytes()).unwrap();
-      gl::ShaderSource(shader, 1, &c_str.as_ptr(), ptr::null());
-      gl::CompileShader(shader);
-      // Get the compile status
-      let mut status = gl::FALSE as GLint;
-      gl::GetShaderiv(shader, gl::COMPILE_STATUS, &mut status);
-      // Fail on error
-      if status != (gl::TRUE as GLint) {
-        let mut len = 0;
-        gl::GetShaderiv(shader, gl::INFO_LOG_LENGTH, &mut len);
-        let mut buf = Vec::with_capacity(len as usize);
-        buf.set_len((len as usize) - 1); // subtract 1 to skip the trailing null character
-        gl::GetShaderInfoLog(
-          shader,
-          len,
-          ptr::null_mut(),
-          buf.as_mut_ptr() as *mut GLchar,
-        );
-        panic!(
-          "{}",
-          str::from_utf8(&buf)
-            .ok()
-            .expect("ShaderInfoLog not valid utf8")
-        );
-      }
-    }
-    shader
-  }
-  fn link_program(vs: GLuint, fs: GLuint) -> GLuint {
-    unsafe {
-      let program = gl::CreateProgram();
-      gl::AttachShader(program, vs);
-      gl::AttachShader(program, fs);
-      gl::LinkProgram(program);
-      // Get the link status
-      let mut status = gl::FALSE as GLint;
-      gl::GetProgramiv(program, gl::LINK_STATUS, &mut status);
-      // Fail on error
-      if status != (gl::TRUE as GLint) {
-        let mut len: GLint = 0;
-        gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut len);
-        let mut buf = Vec::with_capacity(len as usize);
-        buf.set_len((len as usize) - 1); // subtract 1 to skip the trailing null character
-        gl::GetProgramInfoLog(
-          program,
-          len,
-          ptr::null_mut(),
-          buf.as_mut_ptr() as *mut GLchar,
-        );
-        panic!(
-          "{}",
-          str::from_utf8(&buf)
-            .ok()
-            .expect("ProgramInfoLog not valid utf8")
-        );
-      }
-      program
-    }
-  }
-
   type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
   #[allow(dead_code)] // FIXME Remove when possible
   pub struct App {
@@ -130,9 +67,9 @@ void main() {
       gl::load_with(|symbol| self.window.get_proc_address(symbol) as *const _);
 
       // Create GLSL shaders
-      let vs = compile_shader(VS_SRC, gl::VERTEX_SHADER);
-      let fs = compile_shader(FS_SRC, gl::FRAGMENT_SHADER);
-      let program = link_program(vs, fs);
+      let vs = shader::shader::compile_shader(VS_SRC, gl::VERTEX_SHADER);
+      let fs = shader::shader::compile_shader(FS_SRC, gl::FRAGMENT_SHADER);
+      let program = shader::shader::link_program(vs, fs);
       let mut vao = 0;
       let mut vbo = 0;
 
