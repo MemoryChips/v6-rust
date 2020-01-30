@@ -92,18 +92,18 @@ pub mod v6_core {
   }
 }
 
-#[cfg(test)]
-mod tests {
-  use super::v6_core::App;
-  #[test]
-  fn lib_works() {
-    let mut _app = App::new("The app".to_string());
-    _app.run();
-    assert_eq!(_app.app_name, "The app");
-    assert_eq!(2 + 2, 4);
-  }
-  // #[test]
-  // fn fail_test() {
-  //   panic!("Intentional Fail")
-  // }
-}
+// #[cfg(test)]
+// mod tests {
+//   use super::v6_core::App;
+//   #[test]
+//   fn lib_works() {
+//     let mut _app = App::new("The app".to_string());
+//     _app.run();
+//     assert_eq!(_app.app_name, "The app");
+//     assert_eq!(2 + 2, 4);
+//   }
+// #[test]
+// fn fail_test() {
+//   panic!("Intentional Fail")
+// }
+// }

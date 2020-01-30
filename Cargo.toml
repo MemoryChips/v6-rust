@@ -16,6 +16,6 @@ glfw = "0.35.0"
 # git = "https://github.com/bjz/glfw-rs.git"
 
 # this may not be needed for examples
-[[example]]
-name = "sandbox"
-path = "examples/sandbox/main.rs"
+# [[example]]
+# name = "sandbox"
+# path = "examples/sandbox/main.rs"
