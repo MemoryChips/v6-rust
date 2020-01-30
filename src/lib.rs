@@ -5,7 +5,11 @@ extern crate glfw;
 // use glfw::{Action, Context, Key};
 extern crate gl;
 
+mod timer;
+// use timer::Timer;
+
 pub mod v6_core {
+  use super::timer::Timer;
   use gl::types::*;
   use std::ffi::CString;
   use std::mem;
@@ -35,7 +39,7 @@ void main() {
 }";
 
   fn compile_shader(src: &str, ty: GLenum) -> GLuint {
-    let shader;
+    let shader: GLuint;
     unsafe {
       shader = gl::CreateShader(ty);
       // Attempt to compile the shader
@@ -114,6 +118,7 @@ void main() {
   }
   impl App {
     pub fn run(&mut self) {
+      let _t = Timer::new("Run time");
       use crate::glfw::Context; // for make_current function
       self.running = true;
       info!("secret number: {}", rand::random::<f64>());
@@ -169,7 +174,7 @@ void main() {
         }
         unsafe {
           // Clear the screen to black
-          gl::ClearColor(0.3, 0.3, 0.3, 1.0);
+          gl::ClearColor(0.3, 0.0, 0.3, 1.0);
           gl::Clear(gl::COLOR_BUFFER_BIT);
           // Draw a triangle from the 3 vertices
           gl::DrawArrays(gl::TRIANGLES, 0, 3);
