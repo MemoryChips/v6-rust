@@ -67,9 +67,9 @@ void main() {
       gl::load_with(|symbol| self.window.get_proc_address(symbol) as *const _);
 
       // Create GLSL shaders
-      let vs = shader::shader::compile_shader(VS_SRC, gl::VERTEX_SHADER);
-      let fs = shader::shader::compile_shader(FS_SRC, gl::FRAGMENT_SHADER);
-      let program = shader::shader::link_program(vs, fs);
+      let vs = shader::compile_shader(VS_SRC, gl::VERTEX_SHADER);
+      let fs = shader::compile_shader(FS_SRC, gl::FRAGMENT_SHADER);
+      let program = shader::link_program(vs, fs);
       let mut vao = 0;
       let mut vbo = 0;
 
