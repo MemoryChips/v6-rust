@@ -1,5 +1,6 @@
 // #[macro_use]
-// extern crate log;
+extern crate log;
+use log::info;
 // extern crate glfw;
 // use glfw::Glfw;
 // use glfw::{Action, Context, Key};
@@ -16,7 +17,23 @@ pub struct Shader {
   pub renderer_id: u32,
 }
 
+impl Drop for Shader {
+  fn drop(&mut self) {
+    // gl::(self.renderer_id);
+    self.delete_program();
+    info!(
+      "Shader dropped and program deleted: {} {}",
+      self.name, self.renderer_id
+    );
+  }
+}
+
 impl Shader {
+  fn delete_program(&self) {
+    unsafe {
+      gl::DeleteProgram(self.renderer_id);
+    }
+  }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
     let fs = compile_shader(fragment_src, gl::FRAGMENT_SHADER);
