@@ -12,6 +12,15 @@ use std::mem;
 use std::ptr;
 use std::str;
 
+fn create_whitespace_cstring_with_len(len: usize) -> CString {
+  // allocate buffer of correct size
+  let mut buffer: Vec<u8> = Vec::with_capacity(len + 1);
+  // fill it with len spaces
+  buffer.extend([b' '].iter().cycle().take(len));
+  // convert buffer to CString
+  unsafe { CString::from_vec_unchecked(buffer) }
+}
+
 pub struct Shader {
   pub name: String, // TODO: SHould this be public?
   pub renderer_id: u32,
@@ -20,7 +29,7 @@ pub struct Shader {
 impl Drop for Shader {
   fn drop(&mut self) {
     // gl::(self.renderer_id);
-    self.delete_program();
+    Shader::delete_program(self.renderer_id);
     info!(
       "Shader dropped and program deleted: {} {}",
       self.name, self.renderer_id
@@ -29,15 +38,47 @@ impl Drop for Shader {
 }
 
 impl Shader {
-  fn delete_program(&self) {
+  fn delete_program(renderer_id: u32) {
     unsafe {
-      gl::DeleteProgram(self.renderer_id);
+      gl::DeleteProgram(renderer_id);
+    }
+  }
+  fn delete_shader(program: u32, shader_id: u32) {
+    unsafe {
+      gl::DetachShader(program, shader_id);
+      gl::DeleteShader(shader_id);
     }
   }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
     let fs = compile_shader(fragment_src, gl::FRAGMENT_SHADER);
     let program = link_program(vs, fs);
+    unsafe {
+      let mut is_linked: GLint = 0;
+      gl::GetProgramiv(program, gl::LINK_STATUS, &mut is_linked);
+      if is_linked == 0 {
+        error!("Program link failure");
+        let mut max_length: GLint = 0;
+        gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut max_length);
+        let info_log = create_whitespace_cstring_with_len(max_length as usize);
+        gl::GetProgramInfoLog(
+          program,
+          max_length,
+          &mut max_length,
+          info_log.as_ptr() as *mut GLchar,
+        );
+        let error_info = info_log.to_string_lossy().into_owned();
+        error!("Error info: {}", error_info);
+        Shader::delete_program(program);
+        Shader::delete_shader(program, vs);
+        Shader::delete_shader(program, fs);
+      } else {
+        info!("Program link success: {}", program);
+        // TODO: try delete shader etc
+        Shader::delete_shader(program, vs);
+        Shader::delete_shader(program, fs);
+      }
+    }
     let mut vao = 0;
     let mut vbo = 0;
     const VERTEX_DATA: [GLfloat; 6] = [0.0, 0.5, 0.5, -0.5, -0.5, -0.5]; // FIXME: pass this into new
