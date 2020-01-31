@@ -12,16 +12,7 @@ mod shader;
 pub mod v6_core {
   use super::shader;
   use super::timer::Timer;
-  // use gl::types::*;
-  // use std::ffi::CString;
-  // use std::mem;
-  // use std::ptr;
   use std::str;
-  // use std::sync::mpsc::Receiver<f64, glfw::WindowEvent> as WindowEvent
-  // use std::sync::mpsc::Receiver as WindowEventRcvr;
-
-  // Vertex data
-  // static VERTEX_DATA: [GLfloat; 6] = [0.0, 0.5, 0.5, -0.5, -0.5, -0.5];
 
   // Shader sources
   static VS_SRC: &'static str = "
@@ -66,48 +57,7 @@ void main() {
 
       gl::load_with(|symbol| self.window.get_proc_address(symbol) as *const _);
 
-      let tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
-      println!(
-        "tri shader built {}: {}",
-        tri_shader.name, tri_shader.renderer_id
-      );
-
-      // Create GLSL shaders
-      // let vs = shader::compile_shader(VS_SRC, gl::VERTEX_SHADER);
-      // let fs = shader::compile_shader(FS_SRC, gl::FRAGMENT_SHADER);
-      // let program = shader::link_program(vs, fs);
-      // let mut vao = 0;
-      // let mut vbo = 0;
-
-      // unsafe {
-      //   // Create Vertex Array Object
-      //   gl::GenVertexArrays(1, &mut vao);
-      //   gl::BindVertexArray(vao);
-      //   // Create a Vertex Buffer Object and copy the vertex data to it
-      //   gl::GenBuffers(1, &mut vbo);
-      //   gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
-      //   gl::BufferData(
-      //     gl::ARRAY_BUFFER,
-      //     (VERTEX_DATA.len() * mem::size_of::<GLfloat>()) as GLsizeiptr,
-      //     mem::transmute(&VERTEX_DATA[0]),
-      //     gl::STATIC_DRAW,
-      //   );
-      //   // Use shader program
-      //   gl::UseProgram(program);
-      //   gl::BindFragDataLocation(program, 0, CString::new("out_color").unwrap().as_ptr());
-      //   // Specify the layout of the vertex data
-      //   let pos_attr = gl::GetAttribLocation(program, CString::new("position").unwrap().as_ptr());
-      //   gl::EnableVertexAttribArray(pos_attr as GLuint);
-      //   gl::VertexAttribPointer(
-      //     pos_attr as GLuint,
-      //     2,
-      //     gl::FLOAT,
-      //     gl::FALSE as GLboolean,
-      //     0,
-      //     ptr::null(),
-      //   );
-      // }
-
+      let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
       self.glfw.set_swap_interval(glfw::SwapInterval::Sync(1));
 
       while !self.window.should_close() {
@@ -116,7 +66,6 @@ void main() {
           App::handle_window_event(&mut self.window, event);
         }
         unsafe {
-          // Clear the screen to black
           gl::ClearColor(0.3, 0.0, 0.3, 1.0);
           gl::Clear(gl::COLOR_BUFFER_BIT);
           // Draw a triangle from the 3 vertices
@@ -151,7 +100,6 @@ void main() {
       app
     }
     fn glfw_init() -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
-      // let glfw: Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
       let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
       let (window, window_events) = glfw
         .create_window(

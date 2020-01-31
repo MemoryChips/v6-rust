@@ -1,9 +1,6 @@
 // #[macro_use]
 extern crate log;
 use log::info;
-// extern crate glfw;
-// use glfw::Glfw;
-// use glfw::{Action, Context, Key};
 extern crate gl;
 
 use gl::types::*;
@@ -23,12 +20,11 @@ fn create_whitespace_cstring_with_len(len: usize) -> CString {
 
 pub struct Shader {
   pub name: String, // TODO: SHould this be public?
-  pub renderer_id: u32,
+  renderer_id: u32,
 }
 
 impl Drop for Shader {
   fn drop(&mut self) {
-    // gl::(self.renderer_id);
     Shader::delete_program(self.renderer_id);
     info!(
       "Shader dropped and program deleted: {} {}",
@@ -56,7 +52,7 @@ impl Shader {
     unsafe {
       let mut is_linked: GLint = 0;
       gl::GetProgramiv(program, gl::LINK_STATUS, &mut is_linked);
-      if is_linked == 0 {
+      if is_linked == gl::FALSE as GLint {
         error!("Program link failure");
         let mut max_length: GLint = 0;
         gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut max_length);
@@ -74,7 +70,6 @@ impl Shader {
         Shader::delete_shader(program, fs);
       } else {
         info!("Program link success: {}", program);
-        // TODO: try delete shader etc
         Shader::delete_shader(program, vs);
         Shader::delete_shader(program, fs);
       }
