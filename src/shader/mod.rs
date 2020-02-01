@@ -1,6 +1,6 @@
 // #[macro_use]
 extern crate log;
-use log::info;
+use log::{error, info};
 extern crate gl;
 
 use gl::types::*;
