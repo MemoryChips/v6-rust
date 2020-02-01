@@ -27,8 +27,10 @@ impl Drop for Shader {
   fn drop(&mut self) {
     Shader::delete_program(self.renderer_id);
     info!(
-      "Shader dropped and program deleted: {} {}",
-      self.name, self.renderer_id
+      "[{}] Shader dropped and program deleted: {} {}",
+      line!(),
+      self.name,
+      self.renderer_id
     );
   }
 }
@@ -64,7 +66,7 @@ impl Shader {
           info_log.as_ptr() as *mut GLchar,
         );
         let error_info = info_log.to_string_lossy().into_owned();
-        error!("Error info: {}", error_info);
+        error!("[{}] Error info: {}", line!(), error_info);
         Shader::delete_program(program);
         Shader::delete_shader(program, vs);
         Shader::delete_shader(program, fs);
