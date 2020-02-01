@@ -4,8 +4,9 @@
 
 ```bash
 cargo build
-cargo test
-cargo run --example sandbox
+cargo test # run all tests
+cargo run --example sandbox # run sandbox example
+cargo test texture # run tests with texture in fn name
 ```
 
 ## Setup

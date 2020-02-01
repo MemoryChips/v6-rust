@@ -8,6 +8,7 @@ extern crate gl;
 mod timer;
 // use timer::Timer;
 mod shader;
+pub mod texture;
 
 pub mod v6_core {
   use super::shader;
@@ -41,6 +42,7 @@ void main() {
     minimized: bool,
     // layerStack: LayerStack,
     last_frame_time_sec: f64,
+    duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
     events: WindowEventRcvr,
     glfw: glfw::Glfw,
   }
@@ -60,7 +62,11 @@ void main() {
       let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
       self.glfw.set_swap_interval(glfw::SwapInterval::Sync(1));
 
-      while !self.window.should_close() {
+      use std::time::Instant;
+      let duration = std::time::Duration::from_secs(self.duration_secs);
+      let stop_time = Instant::now() + duration;
+
+      loop {
         self.glfw.poll_events();
         for (_, event) in glfw::flush_messages(&self.events) {
           App::handle_window_event(&mut self.window, event);
@@ -71,7 +77,9 @@ void main() {
           // Draw a triangle from the 3 vertices
           gl::DrawArrays(gl::TRIANGLES, 0, 3);
         }
-
+        if self.window.should_close() || (self.duration_secs != 0 && stop_time < Instant::now()) {
+          break;
+        }
         self.window.swap_buffers();
       }
     }
@@ -86,13 +94,17 @@ void main() {
     pub fn is_running(&self) -> bool {
       self.running
     }
-    pub fn new(name: String) -> App {
+    pub fn stop(&mut self) {
+      self.window.set_should_close(true);
+    }
+    pub fn new(name: String, duration_secs: u64) -> App {
       let (glfw, window, events) = App::glfw_init();
       let app = App {
         app_name: name,
         running: false,
         minimized: false,
         last_frame_time_sec: 0.0,
+        duration_secs,
         window,
         events,
         glfw,

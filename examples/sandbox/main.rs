@@ -13,11 +13,11 @@ fn main() {
   //   Err(e) => println!("Error setting up logger: {:?}", e),
   // };
 
-  warn!("warn from main example");
-  info!("info from main example");
-  let _t = timer::Timer::new("Main Example");
-  let mut app = App::new("The app".to_string());
-  info!("App is running: {}", app.is_running());
+  let _t = timer::Timer::new(&format!("Main Example, {}, {}", file!(), line!()));
+  let mut app = App::new("The app".to_string(), 2);
   app.run();
   info!("App is now running: {}", app.is_running());
+  // let one_sec = std::time::Duration::from_millis(1000);
+  // std::thread::sleep(one_sec);
+  // app.stop();
 }
