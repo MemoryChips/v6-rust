@@ -19,7 +19,7 @@ fn create_whitespace_cstring_with_len(len: usize) -> CString {
 }
 
 pub struct Shader {
-  pub name: String, // TODO: SHould this be public?
+  name: String,
   renderer_id: u32,
 }
 
@@ -27,7 +27,7 @@ impl Drop for Shader {
   fn drop(&mut self) {
     Shader::delete_program(self.renderer_id);
     info!(
-      "[{}] Shader dropped and program deleted: {} {}",
+      "[{}] Shader struct dropped and program deleted: {} {}",
       line!(),
       self.name,
       self.renderer_id
