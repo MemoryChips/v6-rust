@@ -15,6 +15,12 @@ pub mod v6_core {
   use super::timer::Timer;
   use std::str;
 
+  pub struct WindowProps {
+    pub title: String,
+    pub w: u32,
+    pub h: u32,
+    // vsync: bool,
+  }
   // Shader sources
   static VS_SRC: &'static str = "
 #version 150
@@ -97,10 +103,10 @@ void main() {
     pub fn stop(&mut self) {
       self.window.set_should_close(true);
     }
-    pub fn new(name: String, duration_secs: u64) -> App {
-      let (glfw, window, events) = App::glfw_init();
+    pub fn new(props: WindowProps, duration_secs: u64) -> App {
+      let (glfw, window, events) = App::glfw_init(&props);
       let app = App {
-        app_name: name,
+        app_name: props.title,
         running: false,
         minimized: false,
         last_frame_time_sec: 0.0,
@@ -111,13 +117,14 @@ void main() {
       };
       app
     }
-    fn glfw_init() -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
+    fn glfw_init(props: &WindowProps) -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
       let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
       let (window, window_events) = glfw
         .create_window(
-          400,
-          400,
-          "English 日本語 русский язык 官話",
+          props.w,
+          props.h,
+          &props.title,
+          // "English 日本語 русский язык 官話",
           glfw::WindowMode::Windowed,
         )
         .expect("Unable to create window");

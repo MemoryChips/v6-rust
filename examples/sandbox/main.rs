@@ -14,7 +14,12 @@ fn main() {
   // };
 
   let _t = timer::Timer::new(&format!("Main Example, {}, {}", file!(), line!()));
-  let mut app = App::new("The app".to_string(), 2);
+  let w_props = v6::v6_core::WindowProps {
+    title: "English 日本語 русский язык 官話".to_string(),
+    w: 400,
+    h: 400,
+  };
+  let mut app = App::new(w_props, 2);
   app.run();
   info!("App is now running: {}", app.is_running());
   // let one_sec = std::time::Duration::from_millis(1000);
