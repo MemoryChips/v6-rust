@@ -53,6 +53,15 @@ void main() {
     glfw: glfw::Glfw,
   }
   impl App {
+    pub fn get_string(which: gl::types::GLenum) -> String {
+      let info = unsafe {
+        let data = std::ffi::CStr::from_ptr(gl::GetString(which) as *const _)
+          .to_bytes()
+          .to_vec();
+        String::from_utf8(data).unwrap()
+      };
+      info
+    }
     pub fn run(&mut self) {
       let _t = Timer::new("Run time");
       use crate::glfw::Context; // for make_current function
@@ -64,14 +73,14 @@ void main() {
       self.window.make_current();
 
       gl::load_with(|symbol| self.window.get_proc_address(symbol) as *const _);
-      unsafe {
-        // info!("OpenGL Info:");
-        let info = gl::GetString(gl::VENDOR);
-        info!("  Vendor: {:?}", info);
-        // info!("  Vendor: {0}", String from gl::GetString(gl::VENDOR));
-        // info!("  Renderer: {0}", glGetString(GL_RENDERER));
-        // info!("  Version: {0}", glGetString(GL_VERSION));
-      }
+      // info!("OpenGL Info:");
+      let info = App::get_string(gl::VENDOR);
+      // let info = gl::GetString(gl::VENDOR) as *mut char;
+      // let error_info = (*info).to_string();
+      info!("  Vendor: {:?}", info);
+      // info!("  Vendor: {0}", String from gl::GetString(gl::VENDOR));
+      // info!("  Renderer: {0}", glGetString(GL_RENDERER));
+      // info!("  Version: {0}", glGetString(GL_VERSION));
       let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
       self.glfw.set_swap_interval(glfw::SwapInterval::Sync(1));
 
