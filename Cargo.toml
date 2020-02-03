@@ -12,6 +12,8 @@ simple_logger = "1.4.0"
 rand = "0.7.3"
 glfw = "0.35.0"
 gl = "0.14.0"
+# glm = "0.2.3"
+glam = "0.8.5"
 
 # [dependencies.glfw]
 # git = "https://github.com/bjz/glfw-rs.git"

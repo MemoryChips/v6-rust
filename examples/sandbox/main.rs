@@ -4,6 +4,8 @@ mod timer;
 extern crate log;
 extern crate simple_logger;
 
+const DEMO_VERSION: &str = "1.0.0";
+
 fn main() {
   simple_logger::init_with_level(log::Level::Info).unwrap();
   // match simple_logger::init_with_level(log::Level::Info) {
@@ -19,9 +21,10 @@ fn main() {
     w: 400,
     h: 400,
   };
+  info!("Demo Version: {}", DEMO_VERSION);
   let mut app = App::new(w_props, 2);
   app.run();
-  info!("App is now running: {}", app.is_running());
+  // info!("App is now running: {}", app.is_running());
   // let one_sec = std::time::Duration::from_millis(1000);
   // std::thread::sleep(one_sec);
   // app.stop();

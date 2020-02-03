@@ -1,12 +1,12 @@
 #[macro_use]
 extern crate log;
-extern crate glfw;
-// use glfw::Glfw;
-// use glfw::{Action, Context, Key};
 extern crate gl;
+extern crate glam;
+extern crate glfw;
 
 mod timer;
 // use timer::Timer;
+pub mod renderer;
 mod shader;
 pub mod texture;
 
@@ -57,14 +57,21 @@ void main() {
       let _t = Timer::new("Run time");
       use crate::glfw::Context; // for make_current function
       self.running = true;
-      info!("secret number: {}", rand::random::<f64>());
-      info!("{} is running: {}", self.app_name, self.is_running());
+      // info!("secret number: {}", rand::random::<f64>());
+      // info!("{} is running: {}", self.app_name, self.is_running());
       info!("App name: {}", self.app_name);
       self.window.set_key_polling(true);
       self.window.make_current();
 
       gl::load_with(|symbol| self.window.get_proc_address(symbol) as *const _);
-
+      unsafe {
+        // info!("OpenGL Info:");
+        let info = gl::GetString(gl::VENDOR);
+        info!("  Vendor: {:?}", info);
+        // info!("  Vendor: {0}", String from gl::GetString(gl::VENDOR));
+        // info!("  Renderer: {0}", glGetString(GL_RENDERER));
+        // info!("  Version: {0}", glGetString(GL_VERSION));
+      }
       let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
       self.glfw.set_swap_interval(glfw::SwapInterval::Sync(1));
 

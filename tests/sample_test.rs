@@ -14,8 +14,10 @@ mod tests {
     assert_eq!(_app.app_name, title);
     assert!(_app.is_running());
   }
+  // use v6::renderer::SceneData;
   // #[test]
-  // fn fail_test() {
-  //   panic!("Intentional Fail")
+  // fn renderer_test() {
+  //   let s = SceneData { d: 26 };
+  //   assert_eq!(s.d, 26);
   // }
 }
