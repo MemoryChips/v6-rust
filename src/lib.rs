@@ -73,14 +73,13 @@ void main() {
       self.window.make_current();
 
       gl::load_with(|symbol| self.window.get_proc_address(symbol) as *const _);
-      // info!("OpenGL Info:");
+
+      info!("OpenGL Info:");
       let info = App::get_string(gl::VENDOR);
-      // let info = gl::GetString(gl::VENDOR) as *mut char;
-      // let error_info = (*info).to_string();
-      info!("  Vendor: {:?}", info);
-      // info!("  Vendor: {0}", String from gl::GetString(gl::VENDOR));
-      // info!("  Renderer: {0}", glGetString(GL_RENDERER));
-      // info!("  Version: {0}", glGetString(GL_VERSION));
+      info!("  Vendor: {0}", info);
+      info!("  Renderer: {0}", App::get_string(gl::RENDERER));
+      info!("  Version: {0}", App::get_string(gl::VERSION));
+
       let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
       self.glfw.set_swap_interval(glfw::SwapInterval::Sync(1));
 
