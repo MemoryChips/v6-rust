@@ -54,13 +54,15 @@ void main() {
   }
   impl App {
     pub fn get_string(which: gl::types::GLenum) -> String {
-      let info = unsafe {
+      unsafe {
         let data = std::ffi::CStr::from_ptr(gl::GetString(which) as *const _)
           .to_bytes()
           .to_vec();
-        String::from_utf8(data).unwrap()
-      };
-      info
+        match String::from_utf8(data) {
+          Ok(info) => info,
+          Err(_e) => "".to_string(),
+        }
+      }
     }
     pub fn run(&mut self) {
       let _t = Timer::new("Run time");
