@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-  use v6::v6_core::App;
+  use v6::core::App;
   #[test]
   fn sample_test() {
     let title = "English 日本語 русский язык 官話";
