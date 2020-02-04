@@ -16,7 +16,7 @@ fn main() {
   // };
 
   let _t = timer::Timer::new(&format!("Main Example, {}, {}", file!(), line!()));
-  let w_props = v6::v6_core::WindowProps {
+  let w_props = v6::window::WindowProps {
     title: "English 日本語 русский язык 官話".to_string(),
     w: 400,
     h: 400,

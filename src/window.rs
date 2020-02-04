@@ -3,19 +3,19 @@ type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
 // trait
 
 pub struct WindowProps {
-  title: String,
-  w: u32,
-  h: u32,
+  pub title: String,
+  pub w: u32,
+  pub h: u32,
   // vsync: bool,
 }
 
 #[allow(dead_code)] // FIXME Remove when possible
 pub struct Window {
-  props: WindowProps,
-  window: glfw::Window,
+  pub props: WindowProps,
+  pub window: glfw::Window,
   minimized: bool,
-  events: WindowEventRcvr,
-  glfw: glfw::Glfw,
+  pub events: WindowEventRcvr,
+  pub glfw: glfw::Glfw,
 }
 
 // fn glfw_error_callback(err: i32, description: &char) {
@@ -37,9 +37,10 @@ pub fn get_string(which: gl::types::GLenum) -> String {
 impl Drop for Window {
   fn drop(&mut self) {
     info!("Window dropped.");
-    unsafe {
-      glfw::ffi::glfwTerminate();
-    }
+    // FIXME: unable to terminate glfw on window drop
+    // unsafe {
+    //   glfw::ffi::glfwTerminate();
+    // }
   }
 }
 

@@ -13,14 +13,15 @@ pub mod window;
 pub mod v6_core {
   use super::shader;
   use super::timer::Timer;
+  use super::window::*;
   use std::str;
 
-  pub struct WindowProps {
-    pub title: String,
-    pub w: u32,
-    pub h: u32,
-    // vsync: bool,
-  }
+  // pub struct WindowProps {
+  //   pub title: String,
+  //   pub w: u32,
+  //   pub h: u32,
+  //   // vsync: bool,
+  // }
   // Shader sources
   static VS_SRC: &'static str = "
 #version 150
@@ -42,7 +43,7 @@ void main() {
   #[allow(dead_code)] // FIXME Remove when possible
   pub struct App {
     pub app_name: String,
-    pub window: glfw::Window,
+    // pub window: glfw::Window,
     // imGuiLayer: ImGuiLayer,
     running: bool,
     last_frame_time_sec: f64,
@@ -50,11 +51,13 @@ void main() {
     // layerStack: LayerStack,
     //
     // move the following to window
-    minimized: bool,         // where should this go?
-    events: WindowEventRcvr, // already moved
-    glfw: glfw::Glfw,        // already moved
+    // minimized: bool,         // where should this go?
+    // events: WindowEventRcvr, // already moved
+    // glfw: glfw::Glfw,        // already moved
+    pub window: Window,
   }
   impl App {
+    // TODO: Move this to a better place
     pub fn get_string(which: gl::types::GLenum) -> String {
       unsafe {
         let data = std::ffi::CStr::from_ptr(gl::GetString(which) as *const _)
@@ -74,10 +77,11 @@ void main() {
       info!("App name: {}", self.app_name);
 
       use glfw::Context; // for make_current function
-      self.window.set_key_polling(true);
-      self.window.make_current();
 
-      gl::load_with(|symbol| self.window.get_proc_address(symbol) as *const _);
+      // FIXME: move this to window.rs
+      self.window.window.set_key_polling(true);
+      self.window.window.make_current();
+      gl::load_with(|symbol| self.window.window.get_proc_address(symbol) as *const _);
 
       info!("OpenGL Info:");
       let info = App::get_string(gl::VENDOR);
@@ -86,16 +90,19 @@ void main() {
       info!("  Version: {0}", App::get_string(gl::VERSION));
 
       let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
-      self.glfw.set_swap_interval(glfw::SwapInterval::Sync(1));
+      self
+        .window
+        .glfw
+        .set_swap_interval(glfw::SwapInterval::Sync(1));
 
       use std::time::Instant;
       let duration = std::time::Duration::from_secs(self.duration_secs);
       let stop_time = Instant::now() + duration;
 
       loop {
-        self.glfw.poll_events();
-        for (_, event) in glfw::flush_messages(&self.events) {
-          App::handle_window_event(&mut self.window, event);
+        self.window.glfw.poll_events();
+        for (_, event) in glfw::flush_messages(&self.window.events) {
+          App::handle_window_event(&mut self.window.window, event);
         }
         unsafe {
           gl::ClearColor(0.3, 0.0, 0.3, 1.0);
@@ -103,10 +110,12 @@ void main() {
           // Draw a triangle from the 3 vertices
           gl::DrawArrays(gl::TRIANGLES, 0, 3);
         }
-        if self.window.should_close() || (self.duration_secs != 0 && stop_time < Instant::now()) {
+        if self.window.window.should_close()
+          || (self.duration_secs != 0 && stop_time < Instant::now())
+        {
           break;
         }
-        self.window.swap_buffers();
+        self.window.window.swap_buffers();
       }
     }
     fn handle_window_event(window: &mut glfw::Window, event: glfw::WindowEvent) {
@@ -121,19 +130,20 @@ void main() {
       self.running
     }
     pub fn stop(&mut self) {
-      self.window.set_should_close(true);
+      self.window.window.set_should_close(true);
     }
     pub fn new(props: WindowProps, duration_secs: u64) -> App {
-      let (glfw, window, events) = App::glfw_init(&props);
+      // let (glfw, window, events) = App::glfw_init(&props);
+      let window = Window::new(props);
       let app = App {
-        app_name: props.title,
+        app_name: "Main App".to_string(),
         running: false,
-        minimized: false,
+        // minimized: false,
         last_frame_time_sec: 0.0,
         duration_secs,
         window,
-        events,
-        glfw,
+        // events,
+        // glfw,
       };
       app
     }
