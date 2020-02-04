@@ -1,4 +1,4 @@
-use v6::core::core::App;
+use v6::core::App;
 mod timer;
 #[macro_use]
 extern crate log;
