@@ -14,10 +14,4 @@ mod tests {
     assert_eq!(_app.app_name, "Main App"); // TODO: make this settable
     assert!(_app.is_running());
   }
-  // use v6::renderer::SceneData;
-  // #[test]
-  // fn renderer_test() {
-  //   let s = SceneData { d: 26 };
-  //   assert_eq!(s.d, 26);
-  // }
 }

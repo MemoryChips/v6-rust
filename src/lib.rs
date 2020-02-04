@@ -16,13 +16,6 @@ pub mod v6_core {
   use super::window::*;
   use std::str;
 
-  // pub struct WindowProps {
-  //   pub title: String,
-  //   pub w: u32,
-  //   pub h: u32,
-  //   // vsync: bool,
-  // }
-  // Shader sources
   static VS_SRC: &'static str = "
 #version 150
 in vec2 position;
@@ -39,21 +32,14 @@ void main() {
     out_color = vec4(1.0, 1.0, 0.0, 1.0);
 }";
 
-  // type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
   #[allow(dead_code)] // FIXME Remove when possible
   pub struct App {
     pub app_name: String,
-    // pub window: glfw::Window,
     // imGuiLayer: ImGuiLayer,
     running: bool,
     last_frame_time_sec: f64,
     duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
     // layerStack: LayerStack,
-    //
-    // move the following to window
-    // minimized: bool,         // where should this go?
-    // events: WindowEventRcvr, // already moved
-    // glfw: glfw::Glfw,        // already moved
     pub window: Window,
   }
   impl App {
@@ -72,8 +58,6 @@ void main() {
     pub fn run(&mut self) {
       let _t = Timer::new("Run time");
       self.running = true;
-      // info!("secret number: {}", rand::random::<f64>());
-      // info!("{} is running: {}", self.app_name, self.is_running());
       info!("App name: {}", self.app_name);
 
       // TODO: move this to window.rs?
@@ -139,37 +123,12 @@ void main() {
       let app = App {
         app_name: "Main App".to_string(),
         running: false,
-        // minimized: false,
         last_frame_time_sec: 0.0,
         duration_secs,
         window,
-        // events,
-        // glfw,
       };
       app
     }
-    // fn glfw_init(props: &WindowProps) -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
-    //   let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
-    //   let (window, window_events) = glfw
-    //     .create_window(
-    //       props.w,
-    //       props.h,
-    //       &props.title,
-    //       // "English 日本語 русский язык 官話",
-    //       glfw::WindowMode::Windowed,
-    //     )
-    //     .expect("Unable to create window");
-    //   (glfw, window, window_events)
-    // }
-    // pub fn on_event(&self, &e Event) {}
-    // pub fn push_layer(&self, &layer Layer) {}
-    // pub fn push_overlay(&self, &layer Layer) {}
-    // pub fn get_window(&self) -> &Window {
-    //   &self.window
-    // }
-    // fn onWindowClosed(&self, WindowCloseEvent &e) {}
-    // bool onWindowResize(&self, WindowResizeEvent &e) {}
-    // bool onKeyReleased([[maybe_unused]] KeyReleasedEvent &e) {}
   }
   impl Drop for App {
     fn drop(&mut self) {

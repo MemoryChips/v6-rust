@@ -1,12 +1,9 @@
 type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
 
-// trait
-
 pub struct WindowProps {
   pub title: String,
   pub w: u32,
   pub h: u32,
-  // vsync: bool,
 }
 
 #[allow(dead_code)] // FIXME Remove when possible
@@ -17,10 +14,6 @@ pub struct Window {
   pub events: WindowEventRcvr,
   pub glfw: glfw::Glfw,
 }
-
-// fn glfw_error_callback(err: i32, description: &char) {
-//   error!("GLFW Error ({0}): {1}", err, description);
-// }
 
 pub fn get_string(which: gl::types::GLenum) -> String {
   unsafe {
@@ -77,7 +70,6 @@ impl Window {
     }
   }
   fn glfw_init(props: &WindowProps) -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
-    // glfw::ffi::
     let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
     let (window, window_events) = glfw
       .create_window(
