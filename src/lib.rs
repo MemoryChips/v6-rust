@@ -39,7 +39,7 @@ void main() {
     out_color = vec4(1.0, 1.0, 0.0, 1.0);
 }";
 
-  type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
+  // type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
   #[allow(dead_code)] // FIXME Remove when possible
   pub struct App {
     pub app_name: String,
@@ -76,9 +76,8 @@ void main() {
       // info!("{} is running: {}", self.app_name, self.is_running());
       info!("App name: {}", self.app_name);
 
+      // TODO: move this to window.rs?
       use glfw::Context; // for make_current function
-
-      // FIXME: move this to window.rs
       self.window.window.set_key_polling(true);
       self.window.window.make_current();
       gl::load_with(|symbol| self.window.window.get_proc_address(symbol) as *const _);
@@ -90,6 +89,7 @@ void main() {
       info!("  Version: {0}", App::get_string(gl::VERSION));
 
       let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
+      // TODO: Move to window.rs?
       self
         .window
         .glfw
@@ -118,6 +118,7 @@ void main() {
         self.window.window.swap_buffers();
       }
     }
+    // TODO: move this to Window.rs?
     fn handle_window_event(window: &mut glfw::Window, event: glfw::WindowEvent) {
       match event {
         glfw::WindowEvent::Key(glfw::Key::Escape, _, glfw::Action::Press, _) => {
@@ -147,19 +148,19 @@ void main() {
       };
       app
     }
-    fn glfw_init(props: &WindowProps) -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
-      let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
-      let (window, window_events) = glfw
-        .create_window(
-          props.w,
-          props.h,
-          &props.title,
-          // "English 日本語 русский язык 官話",
-          glfw::WindowMode::Windowed,
-        )
-        .expect("Unable to create window");
-      (glfw, window, window_events)
-    }
+    // fn glfw_init(props: &WindowProps) -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
+    //   let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
+    //   let (window, window_events) = glfw
+    //     .create_window(
+    //       props.w,
+    //       props.h,
+    //       &props.title,
+    //       // "English 日本語 русский язык 官話",
+    //       glfw::WindowMode::Windowed,
+    //     )
+    //     .expect("Unable to create window");
+    //   (glfw, window, window_events)
+    // }
     // pub fn on_event(&self, &e Event) {}
     // pub fn push_layer(&self, &layer Layer) {}
     // pub fn push_overlay(&self, &layer Layer) {}
