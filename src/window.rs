@@ -1,3 +1,5 @@
+// TODO: add set viewport as done C++ version
+
 type WindowEventRcvr = std::sync::mpsc::Receiver<(f64, glfw::WindowEvent)>;
 
 pub struct WindowProps {
