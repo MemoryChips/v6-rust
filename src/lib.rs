@@ -45,12 +45,14 @@ void main() {
     pub window: glfw::Window,
     // imGuiLayer: ImGuiLayer,
     running: bool,
-    minimized: bool,
-    // layerStack: LayerStack,
     last_frame_time_sec: f64,
     duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
-    events: WindowEventRcvr,
-    glfw: glfw::Glfw,
+    // layerStack: LayerStack,
+    //
+    // move the following to window
+    minimized: bool,         // where should this go?
+    events: WindowEventRcvr, // already moved
+    glfw: glfw::Glfw,        // already moved
   }
   impl App {
     pub fn get_string(which: gl::types::GLenum) -> String {
@@ -66,11 +68,12 @@ void main() {
     }
     pub fn run(&mut self) {
       let _t = Timer::new("Run time");
-      use glfw::Context; // for make_current function
       self.running = true;
       // info!("secret number: {}", rand::random::<f64>());
       // info!("{} is running: {}", self.app_name, self.is_running());
       info!("App name: {}", self.app_name);
+
+      use glfw::Context; // for make_current function
       self.window.set_key_polling(true);
       self.window.make_current();
 
