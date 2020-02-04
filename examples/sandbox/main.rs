@@ -1,5 +1,5 @@
 use v6::core::App;
-mod timer;
+use v6::timer;
 #[macro_use]
 extern crate log;
 extern crate simple_logger;
