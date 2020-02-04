@@ -66,7 +66,7 @@ void main() {
     }
     pub fn run(&mut self) {
       let _t = Timer::new("Run time");
-      use crate::glfw::Context; // for make_current function
+      use glfw::Context; // for make_current function
       self.running = true;
       // info!("secret number: {}", rand::random::<f64>());
       // info!("{} is running: {}", self.app_name, self.is_running());
