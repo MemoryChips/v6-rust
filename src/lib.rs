@@ -4,11 +4,11 @@ extern crate gl;
 extern crate glam;
 extern crate glfw;
 
-mod timer;
-// use timer::Timer;
 pub mod renderer;
-mod shader;
+pub mod shader;
 pub mod texture;
+pub mod timer;
+pub mod window;
 
 pub mod v6_core {
   use super::shader;
