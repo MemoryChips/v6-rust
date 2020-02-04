@@ -34,6 +34,15 @@ pub fn get_string(which: gl::types::GLenum) -> String {
   }
 }
 
+impl Drop for Window {
+  fn drop(&mut self) {
+    info!("Window dropped.");
+    unsafe {
+      glfw::ffi::glfwTerminate();
+    }
+  }
+}
+
 impl Window {
   // pub fn set_event_callback(&mut self, event_callback: WindowEventRcvr) {
   //   self.event_callback = event_callback;
@@ -67,6 +76,7 @@ impl Window {
     }
   }
   fn glfw_init(props: &WindowProps) -> (glfw::Glfw, glfw::Window, WindowEventRcvr) {
+    // glfw::ffi::
     let glfw: glfw::Glfw = glfw::init(glfw::FAIL_ON_ERRORS).expect("Unable to initialize glfw");
     let (window, window_events) = glfw
       .create_window(
