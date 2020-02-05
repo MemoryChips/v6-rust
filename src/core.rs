@@ -3,6 +3,8 @@ use crate::shader;
 use crate::timer::Timer;
 use crate::window::*;
 
+use glam::vec4;
+
 use std::str;
 
 static VS_SRC: &'static str = "
@@ -64,8 +66,10 @@ impl App {
         App::handle_window_event(&mut self.window.window, event);
       }
       unsafe {
-        gl::ClearColor(0.3, 0.0, 0.3, 1.0);
-        gl::Clear(gl::COLOR_BUFFER_BIT);
+        // gl::ClearColor(0.3, 0.0, 0.3, 1.0);
+        renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
+        renderer::api::clear();
+        // gl::Clear(gl::COLOR_BUFFER_BIT);
         // Draw a triangle from the 3 vertices
         gl::DrawArrays(gl::TRIANGLES, 0, 3);
       }
