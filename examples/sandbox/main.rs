@@ -8,6 +8,7 @@ const DEMO_VERSION: &str = "1.0.0";
 
 fn main() {
   // simple_logger::init_with_level(log::Level::Info).unwrap();
+  // FIXME: move this to lib.rs
   match simple_logger::init_with_level(log::Level::Info) {
     Ok(()) => info!("Logger setup OK"),
     Err(e) => error!("Error setting up logger: {:?}", e),

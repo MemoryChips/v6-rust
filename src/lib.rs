@@ -4,6 +4,7 @@ extern crate gl;
 extern crate glam;
 extern crate glfw;
 
+// CONSIDER: expose publically only what example needs
 pub mod core;
 pub mod renderer;
 pub mod shader;
