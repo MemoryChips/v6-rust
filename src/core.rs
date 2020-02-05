@@ -87,11 +87,11 @@ impl App {
   pub fn stop(&mut self) {
     self.window.window.set_should_close(true);
   }
-  pub fn new(props: WindowProps, duration_secs: u64) -> App {
+  pub fn new(app_name: &str, props: WindowProps, duration_secs: u64) -> App {
     // let (glfw, window, events) = App::glfw_init(&props);
     let window = Window::new(props);
     let app = App {
-      app_name: "Main App".to_string(),
+      app_name: app_name.to_string(),
       running: false,
       last_frame_time_sec: 0.0,
       duration_secs,

@@ -20,6 +20,6 @@ fn main() {
     h: 400,
   };
   info!("Demo Version: {}", DEMO_VERSION);
-  let mut app = App::new(w_props, 2);
+  let mut app = App::new("Example App", w_props, 2);
   app.run();
 }

@@ -9,9 +9,9 @@ mod tests {
       w: 800,
       h: 600,
     };
-    let mut _app = App::new(w_props, 1);
-    _app.run();
-    assert_eq!(_app.app_name, "Main App"); // TODO: make this settable
-    assert!(_app.is_running());
+    let mut app = App::new(title, w_props, 1);
+    app.run();
+    assert_eq!(app.app_name, title);
+    assert!(app.is_running());
   }
 }
