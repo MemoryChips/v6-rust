@@ -2,17 +2,12 @@ use v6::core::App;
 use v6::timer;
 #[macro_use]
 extern crate log;
-extern crate simple_logger;
+// extern crate simple_logger;
 
 const DEMO_VERSION: &str = "1.0.0";
 
 fn main() {
-  // simple_logger::init_with_level(log::Level::Info).unwrap();
-  // FIXME: move this to lib.rs
-  match simple_logger::init_with_level(log::Level::Info) {
-    Ok(()) => info!("Logger setup OK"),
-    Err(e) => error!("Error setting up logger: {:?}", e),
-  };
+  v6::setup_logger(log::Level::Info);
 
   let _t = timer::Timer::new(&format!("Main Example, {}, {}", file!(), line!()));
   let w_props = v6::window::WindowProps {
