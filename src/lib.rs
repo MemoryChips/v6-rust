@@ -1,5 +1,5 @@
 #[macro_use]
-extern crate log;
+pub extern crate log;
 extern crate gl;
 extern crate glam;
 extern crate glfw;
@@ -11,6 +11,8 @@ pub mod shader;
 pub mod texture;
 pub mod timer;
 pub mod window;
+
+pub use log::Level::Info;
 
 pub fn setup_logger(level: log::Level) {
   match simple_logger::init_with_level(level) {
