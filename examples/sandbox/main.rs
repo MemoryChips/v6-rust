@@ -1,7 +1,7 @@
 use v6::core::App;
 use v6::timer;
-#[macro_use]
-extern crate log;
+// #[macro_use]
+// extern crate log;
 // use log::Level::Info;
 // use log::Level::Warn;
 // use log::Level::Error;
@@ -17,7 +17,7 @@ fn main() {
     w: 400,
     h: 400,
   };
-  info!("Demo Version: {}", DEMO_VERSION);
+  v6::info!("Demo Version: {}", DEMO_VERSION);
   let mut app = App::new("Example App", w_props, 2);
   app.run();
 }
