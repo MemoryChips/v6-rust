@@ -52,7 +52,7 @@ impl App {
         count_down = 20;
       }
       count_down -= 1;
-      self.window.glfw.poll_events(); // TODO: move this when onUpdate is created
+      self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
       for (_, event) in glfw::flush_messages(&self.window.events) {
         App::handle_window_event(&mut self.window.window, event);
       }
@@ -67,7 +67,7 @@ impl App {
       {
         break;
       }
-      // TODO: move this to window.rs? Yes when OnUpdate is added
+      // CONSIDER: move this to window.rs? Yes when OnUpdate is added
       use glfw::Context; // needed for next line
       self.window.window.swap_buffers();
     }

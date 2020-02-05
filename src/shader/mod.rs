@@ -78,7 +78,7 @@ impl Shader {
     }
     let mut vao = 0;
     let mut vbo = 0;
-    const VERTEX_DATA: [GLfloat; 6] = [0.0, 0.5, 0.5, -0.5, -0.5, -0.5]; // TODO: pass this into new
+    const VERTEX_DATA: [GLfloat; 6] = [0.0, 0.5, 0.5, -0.5, -0.5, -0.5]; // CONSIDER: pass this into new
     unsafe {
       // Create Vertex Array Object
       gl::GenVertexArrays(1, &mut vao);
