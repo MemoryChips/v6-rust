@@ -15,7 +15,7 @@ pub mod api {
   pub unsafe fn init() {
     gl::Enable(gl::BLEND);
     gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
-    gl::Enable(gl::DEPTH_TEST);
+    // gl::Enable(gl::DEPTH_TEST);
   }
   pub unsafe fn set_viewport(x: i32, y: i32, w: i32, h: i32) {
     gl::Viewport(x, y, w, h);

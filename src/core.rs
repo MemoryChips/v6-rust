@@ -1,6 +1,8 @@
+use crate::renderer;
 use crate::shader;
 use crate::timer::Timer;
 use crate::window::*;
+
 use std::str;
 
 static VS_SRC: &'static str = "
@@ -36,10 +38,15 @@ impl App {
 
     let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
 
+    unsafe {
+      renderer::api::init();
+    } // CONSIDER: checking success
+
     use std::time::Instant;
     let duration = std::time::Duration::from_secs(self.duration_secs);
     let stop_time = Instant::now() + duration;
     let mut count_down = 0;
+
     loop {
       let time_step: f64;
       unsafe {
