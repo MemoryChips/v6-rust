@@ -10,7 +10,7 @@ use gl::types::*;
 
 // pub fn create_texture_from_file(&path: str) {}
 
-#[allow(dead_code)] // FIXME Remove when possible
+#[allow(dead_code)] // TODO Remove when possible
 pub struct Texture2D {
   // path: String,
   w: GLsizei,
@@ -25,7 +25,7 @@ impl Texture2D {
     let mut renderer_id: u32 = 0;
     let internal_format = gl::RGBA8;
     unsafe {
-      // FIXME Create test window to test texture setup in opengl
+      // TODO Create test window to test texture setup in opengl
       gl::CreateTextures(gl::TEXTURE_2D, 1, &mut renderer_id);
       gl::TextureStorage2D(renderer_id, 1, internal_format, w, h);
     }

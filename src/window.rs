@@ -8,7 +8,7 @@ pub struct WindowProps {
   pub h: u32,
 }
 
-#[allow(dead_code)] // FIXME Remove when possible
+#[allow(dead_code)] // TODO Remove when possible
 pub struct Window {
   pub props: WindowProps,
   pub window: glfw::Window,
@@ -32,7 +32,7 @@ pub fn get_string(which: gl::types::GLenum) -> String {
 impl Drop for Window {
   fn drop(&mut self) {
     info!("Window dropped.");
-    // FIXME: unable to terminate glfw on window drop
+    // TODO: unable to terminate glfw on window drop
     // unsafe {
     //   glfw::ffi::glfwTerminate();
     // }
