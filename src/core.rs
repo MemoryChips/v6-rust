@@ -72,7 +72,7 @@ impl App {
       self.window.window.swap_buffers();
     }
   }
-  // TODO: move this to Window.rs? Yes when OnUpdate is added
+  // CONSIDER: move this to Window.rs? Yes when OnUpdate is added
   fn handle_window_event(window: &mut glfw::Window, event: glfw::WindowEvent) {
     match event {
       glfw::WindowEvent::Key(glfw::Key::Escape, _, glfw::Action::Press, _) => {
