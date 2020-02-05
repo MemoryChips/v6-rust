@@ -14,6 +14,8 @@ pub mod window;
 
 pub use log::info;
 pub use log::Level::{Error, Info, Warn};
+pub use timer::Timer;
+// pub use core::App;
 
 pub fn setup_logger(level: log::Level) {
   match simple_logger::init_with_level(level) {
