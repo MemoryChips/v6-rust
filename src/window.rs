@@ -55,6 +55,9 @@ impl Window {
     window.set_key_polling(true);
     window.make_current();
 
+    // This is a function in the C++ version
+    window.glfw.set_swap_interval(glfw::SwapInterval::Sync(1));
+
     gl::load_with(|symbol| window.get_proc_address(symbol) as *const _);
 
     info!("OpenGL Info:");

@@ -49,24 +49,7 @@ impl App {
     self.running = true;
     info!("App name: {}", self.app_name);
 
-    // TODO: move this to window.rs?
-    use glfw::Context; // for make_current function
-    self.window.window.set_key_polling(true);
-    self.window.window.make_current();
-    gl::load_with(|symbol| self.window.window.get_proc_address(symbol) as *const _);
-
-    info!("OpenGL Info:");
-    let info = App::get_string(gl::VENDOR);
-    info!("  Vendor: {0}", info);
-    info!("  Renderer: {0}", App::get_string(gl::RENDERER));
-    info!("  Version: {0}", App::get_string(gl::VERSION));
-
     let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
-    // TODO: Move to window.rs?
-    self
-      .window
-      .glfw
-      .set_swap_interval(glfw::SwapInterval::Sync(1));
 
     use std::time::Instant;
     let duration = std::time::Duration::from_secs(self.duration_secs);
@@ -88,6 +71,8 @@ impl App {
       {
         break;
       }
+      // TODO: move this to window.rs?
+      use glfw::Context; // needed for next line
       self.window.window.swap_buffers();
     }
   }
