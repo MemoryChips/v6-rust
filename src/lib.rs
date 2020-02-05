@@ -13,7 +13,6 @@ pub mod timer;
 pub mod window;
 
 pub fn setup_logger(level: log::Level) {
-  // match simple_logger::init_with_level(log::Level::Info) {
   match simple_logger::init_with_level(level) {
     Ok(()) => info!("Logger setup OK"),
     Err(e) => error!("Error setting up logger: {:?}", e),

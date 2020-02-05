@@ -2,12 +2,14 @@ use v6::core::App;
 use v6::timer;
 #[macro_use]
 extern crate log;
-// extern crate simple_logger;
+use log::Level::Info;
+// use log::Level::Warn;
+// use log::Level::Error;
 
 const DEMO_VERSION: &str = "1.0.0";
 
 fn main() {
-  v6::setup_logger(log::Level::Info);
+  v6::setup_logger(Info);
 
   let _t = timer::Timer::new(&format!("Main Example, {}, {}", file!(), line!()));
   let w_props = v6::window::WindowProps {
@@ -16,6 +18,6 @@ fn main() {
     h: 400,
   };
   info!("Demo Version: {}", DEMO_VERSION);
-  let mut app = App::new("Example App", w_props, 4);
+  let mut app = App::new("Example App", w_props, 2);
   app.run();
 }
