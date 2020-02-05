@@ -1,9 +1,6 @@
 use crate::shader;
 use crate::timer::Timer;
 use crate::window::*;
-// use super::shader;
-// use super::timer::Timer;
-// use super::window::*;
 use std::str;
 
 static VS_SRC: &'static str = "
@@ -32,18 +29,6 @@ pub struct App {
   pub window: Window,
 }
 impl App {
-  // TODO: Move this to a better place
-  pub fn get_string(which: gl::types::GLenum) -> String {
-    unsafe {
-      let data = std::ffi::CStr::from_ptr(gl::GetString(which) as *const _)
-        .to_bytes()
-        .to_vec();
-      match String::from_utf8(data) {
-        Ok(info) => info,
-        Err(_e) => "".to_string(),
-      }
-    }
-  }
   pub fn run(&mut self) {
     let _t = Timer::new("Run time");
     self.running = true;
@@ -71,12 +56,12 @@ impl App {
       {
         break;
       }
-      // TODO: move this to window.rs?
+      // TODO: move this to window.rs? Yes when OnUpdate is added
       use glfw::Context; // needed for next line
       self.window.window.swap_buffers();
     }
   }
-  // TODO: move this to Window.rs?
+  // TODO: move this to Window.rs? Yes when OnUpdate is added
   fn handle_window_event(window: &mut glfw::Window, event: glfw::WindowEvent) {
     match event {
       glfw::WindowEvent::Key(glfw::Key::Escape, _, glfw::Action::Press, _) => {
