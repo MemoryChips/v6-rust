@@ -39,9 +39,20 @@ impl App {
     use std::time::Instant;
     let duration = std::time::Duration::from_secs(self.duration_secs);
     let stop_time = Instant::now() + duration;
-
+    let mut count_down = 0;
     loop {
-      self.window.glfw.poll_events();
+      let time_step: f64;
+      unsafe {
+        let time = glfw::ffi::glfwGetTime();
+        time_step = time - self.last_frame_time_sec;
+        self.last_frame_time_sec = time;
+      }
+      if count_down == 0 {
+        info!("Frame time_step: {}", time_step);
+        count_down = 20;
+      }
+      count_down -= 1;
+      self.window.glfw.poll_events(); // TODO: move this when onUpdate is created
       for (_, event) in glfw::flush_messages(&self.window.events) {
         App::handle_window_event(&mut self.window.window, event);
       }
