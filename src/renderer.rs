@@ -5,6 +5,7 @@ pub struct SceneData {
   // pub d: u32,
   view_projection_matrix: Mat4,
 }
+#[allow(dead_code)]
 pub fn create_mat4_f(f: f32) -> Mat4 {
   let v = vec4(f, f, f, f);
   mat4(v, v, v, v)
@@ -17,6 +18,7 @@ pub mod api {
     gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
     // gl::Enable(gl::DEPTH_TEST);
   }
+  #[allow(dead_code)]
   pub unsafe fn set_viewport(x: i32, y: i32, w: i32, h: i32) {
     gl::Viewport(x, y, w, h);
   }
