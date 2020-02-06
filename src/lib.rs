@@ -14,8 +14,8 @@ pub mod window;
 
 // CONSIDER: rename of core.rs
 pub use crate::core::App; // This needed crate for some reason
-pub use log::info;
 pub use log::Level::{Error, Info, Warn};
+pub use log::{error, info, warn};
 pub use timer::Timer;
 
 pub fn setup_logger(level: log::Level) {
