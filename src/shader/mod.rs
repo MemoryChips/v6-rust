@@ -5,6 +5,7 @@ extern crate gl;
 
 use gl::types::*;
 use std::ffi::CString;
+use std::fs;
 use std::mem;
 use std::ptr;
 use std::str;
@@ -47,9 +48,19 @@ impl Shader {
       gl::DeleteShader(shader_id);
     }
   }
-  pub fn new_from_file(filepath: &str) -> String {
-    println!("filepath: {}", filepath);
-    "shader source".to_string()
+  pub fn new_from_file(filename: &str) -> String {
+    println!("filepath: {}", filename);
+    // let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
+    match fs::read_to_string(filename) {
+      Ok(contents) => {
+        println!("contents: {}", contents);
+        return "shader source".to_string();
+      }
+      Err(e) => {
+        println!("Error: {}", e);
+        return "".to_string();
+      }
+    }
   }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
@@ -189,7 +200,8 @@ pub fn link_program(vs: GLuint, fs: GLuint) -> GLuint {
 mod tests {
   #[test]
   fn load_shader_file_test() {
-    let filepath = "./assets/shaders/flatColor.glsl";
+    let filepath = "./examples/sandbox/assets/shaders/flatcolor.glsl";
+    // let filepath = "/home/robert/Training/rust/v6/examples/sandbox/assets/shaders/flatcolor.glsl";
     let ss = super::Shader::new_from_file(filepath);
     assert_eq!(ss, filepath);
     // assert!(_app.is_running());
