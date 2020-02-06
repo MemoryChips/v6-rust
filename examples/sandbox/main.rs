@@ -1,11 +1,3 @@
-use v6::core::App;
-// use v6::timer;
-// #[macro_use]
-// extern crate log;
-// use log::Level::Info;
-// use log::Level::Warn;
-// use log::Level::Error;
-
 const DEMO_VERSION: &str = "1.0.0";
 
 fn main() {
@@ -18,6 +10,6 @@ fn main() {
     h: 400,
   };
   v6::info!("Demo Version: {}", DEMO_VERSION);
-  let mut app = App::new("Example App", w_props, 2);
+  let mut app = v6::App::new("Example App", w_props, 2);
   app.run();
 }
