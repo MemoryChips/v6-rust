@@ -47,6 +47,10 @@ impl Shader {
       gl::DeleteShader(shader_id);
     }
   }
+  pub fn new_from_file(filepath: &str) -> String {
+    println!("filepath: {}", filepath);
+    "shader source".to_string()
+  }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
     let fs = compile_shader(fragment_src, gl::FRAGMENT_SHADER);
@@ -178,5 +182,16 @@ pub fn link_program(vs: GLuint, fs: GLuint) -> GLuint {
       );
     }
     program
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  #[test]
+  fn load_shader_file_test() {
+    let filepath = "./assets/shaders/flatColor.glsl";
+    let ss = super::Shader::new_from_file(filepath);
+    assert_eq!(ss, filepath);
+    // assert!(_app.is_running());
   }
 }
