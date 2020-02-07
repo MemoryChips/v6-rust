@@ -111,11 +111,12 @@ impl Shader {
     }
     shader_sources_map
   }
-  pub fn new_from_file(name: &str, filepath: &str) -> Self {
+  pub fn new(name: &str, filepath: &str) -> Self {
     let shaders = Shader::read_shaders_from_file(filepath);
     Shader::new_from_sources(name, shaders)
   }
-  pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
+  // CONSIDER dropping this version of new
+  pub fn _new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     let mut sources: ShaderSources = HashMap::with_capacity(4);
     sources.insert(gl::VERTEX_SHADER, vertex_src.to_string());
     sources.insert(gl::FRAGMENT_SHADER, fragment_src.to_string());

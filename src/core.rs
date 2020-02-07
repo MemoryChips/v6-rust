@@ -7,21 +7,18 @@ use glam::vec4;
 
 use std::str;
 
-static VS_SRC: &'static str = "
-#version 150
-in vec2 position;
-
-void main() {
-    gl_Position = vec4(position, 0.0, 1.0);
-}";
-
-static FS_SRC: &'static str = "
-#version 150
-out vec4 out_color;
-
-void main() {
-    out_color = vec4(1.0, 1.0, 0.0, 1.0);
-}";
+// static VS_SRC: &'static str = "
+// #version 150
+// in vec2 position;
+// void main() {
+//     gl_Position = vec4(position, 0.0, 1.0);
+// }";
+// static FS_SRC: &'static str = "
+// #version 150
+// out vec4 out_color;
+// void main() {
+//     out_color = vec4(1.0, 1.0, 0.0, 1.0);
+// }";
 
 pub struct App {
   pub app_name: String,
@@ -39,8 +36,8 @@ impl App {
     info!("App name: {}", self.app_name);
 
     let filepath = "./examples/sandbox/assets/shaders/simple-shader.glsl";
-    let _tri_shader = shader::Shader::new_from_file("tri shader", filepath);
-    // let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
+    let _tri_shader = shader::Shader::new("tri shader", filepath);
+    // let _tri_shader = shader::Shader::_new("tri shader", VS_SRC, FS_SRC);
 
     unsafe {
       renderer::api::init();
