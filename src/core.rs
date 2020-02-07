@@ -38,7 +38,9 @@ impl App {
     self.running = true;
     info!("App name: {}", self.app_name);
 
-    let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
+    let filepath = "./examples/sandbox/assets/shaders/simple-shader.glsl";
+    let _tri_shader = shader::Shader::new_from_file("tri shader", filepath);
+    // let _tri_shader = shader::Shader::new("tri shader", VS_SRC, FS_SRC);
 
     unsafe {
       renderer::api::init();
