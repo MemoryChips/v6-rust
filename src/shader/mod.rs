@@ -8,6 +8,7 @@ use regex::Regex;
 use gl::types::*;
 use std::ffi::CString;
 // use std::fs;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::mem;
@@ -23,6 +24,7 @@ fn create_whitespace_cstring_with_len(len: usize) -> CString {
   unsafe { CString::from_vec_unchecked(buffer) }
 }
 
+// CONSIDER: Move this inside Shader Impl
 fn shader_type(s_type: &str) -> GLenum {
   match s_type {
     "vertex" => return gl::VERTEX_SHADER,
@@ -82,42 +84,49 @@ impl Shader {
       gl::DeleteShader(shader_id);
     }
   }
-  pub fn new_from_file(filename: &str) -> std::io::Result<()> {
+  pub fn read_shaders_from_file(filename: &str) -> HashMap<GLenum, String> {
     println!("filepath: {}", filename);
-    let f = File::open(filename)?;
-    let reader = BufReader::new(f);
-    let re = Regex::new(r"\#type (?P<type>.+)").unwrap();
-    let mut shader_source = String::with_capacity(512);
-    let mut current_shader_type: GLenum;
-    let mut working_on_type = false;
-    for line in reader.lines() {
-      match line {
-        Ok(l) => {
-          match re.captures(&l).and_then(|cap| cap.name("type")) {
-            Some(t) => {
-              if working_on_type {
-                println!("{}", shader_source);
-                shader_source = "".to_string();
-              }
-              working_on_type = true;
-              current_shader_type = shader_type(t.as_str());
-              println!("GLenum type: {} : {} ", t.as_str(), current_shader_type);
+    let mut shader_sources_map: HashMap<GLenum, String> = HashMap::with_capacity(4);
+    match File::open(filename) {
+      Ok(f) => {
+        let reader = BufReader::new(f);
+        let re = Regex::new(r"\#type (?P<type>.+)").unwrap();
+        let mut shader_source = String::with_capacity(512);
+        let mut current_shader_type: GLenum = 0;
+        let mut working_on_type = false;
+        for line in reader.lines() {
+          match line {
+            Ok(l) => {
+              match re.captures(&l).and_then(|cap| cap.name("type")) {
+                Some(t) => {
+                  if working_on_type {
+                    // println!("{}", shader_source);
+                    shader_sources_map.insert(current_shader_type, shader_source);
+                    shader_source = "".to_string();
+                  }
+                  current_shader_type = shader_type(t.as_str());
+                  working_on_type = true;
+                  // println!("GLenum type: {} : {} ", t.as_str(), current_shader_type);
+                }
+                _ => {
+                  if working_on_type {
+                    shader_source += &l;
+                    shader_source += &"\n";
+                  }
+                }
+              };
             }
-            _ => {
-              if working_on_type {
-                shader_source += &l;
-                shader_source += &"\n";
-              }
-            }
-          };
+            Err(_e) => error!("Io error accessing file {}: {}", filename, _e),
+          }
         }
-        Err(_e) => println!("Io error: {}", _e),
+        if working_on_type {
+          // println!("{}", shader_source);
+          shader_sources_map.insert(current_shader_type, shader_source);
+        }
       }
+      Err(_e) => error!("Shader file error: {}", _e),
     }
-    if working_on_type {
-      println!("{}", shader_source);
-    }
-    Ok(())
+    shader_sources_map
   }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
@@ -259,7 +268,10 @@ mod tests {
   fn load_shader_file_test() {
     let filepath = "./examples/sandbox/assets/shaders/flatcolor.glsl";
     // let filepath = "/home/robert/Training/rust/v6/examples/sandbox/assets/shaders/flatcolor.glsl";
-    let ss = super::Shader::new_from_file(filepath);
+    let ss_map = super::Shader::read_shaders_from_file(filepath);
+    for k in ss_map.keys() {
+      println!("Key: {}", k)
+    }
     assert_eq!("", filepath);
     // assert!(_app.is_running());
   }
