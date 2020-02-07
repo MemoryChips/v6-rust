@@ -33,27 +33,7 @@ fn shader_type(s_type: &str) -> GLenum {
   }
 }
 
-// fn preprocess(source: &String) {
-//   let file = BufRead::new(File::open(source)).unwrap();
-// let v: Vec<&str> = source.split("#type ").collect();
-// let re = Regex::new(r"(\s+)").unwrap();
-
-// for s in v {
-//   let t = re.captures(s).unwrap()[0];
-//   println!("{}: {}", t, s);
-// }
-// println!("0: {}", v[0]);
-// println!("1: {}", v[1]);
-// println!("2: {}", v[2]);
-// let re = Regex::new(r"(\#type )(.+)\n([\s\S]+)").unwrap();
-// // let re = Regex::new(r"(\#type )(.+\r\n)(.+)").unwrap();
-// for cap in re.captures_iter(source) {
-//   println!("{}", &cap[0]);
-//   println!("cap 1: {}", &cap[1]);
-//   println!("cap 2: {}", &cap[2]);
-//   println!("cap 3: {}", &cap[3]);
-// }
-// }
+type ShaderSources = HashMap<GLenum, String>;
 
 pub struct Shader {
   name: String,
@@ -84,9 +64,9 @@ impl Shader {
       gl::DeleteShader(shader_id);
     }
   }
-  pub fn read_shaders_from_file(filename: &str) -> HashMap<GLenum, String> {
+  fn read_shaders_from_file(filename: &str) -> ShaderSources {
     println!("filepath: {}", filename);
-    let mut shader_sources_map: HashMap<GLenum, String> = HashMap::with_capacity(4);
+    let mut shader_sources_map: ShaderSources = HashMap::with_capacity(4);
     match File::open(filename) {
       Ok(f) => {
         let reader = BufReader::new(f);
@@ -129,6 +109,7 @@ impl Shader {
     shader_sources_map
   }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
+    // TODO Convert this to accept a hashmap
     let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
     let fs = compile_shader(fragment_src, gl::FRAGMENT_SHADER);
     let program = link_program(vs, fs);
