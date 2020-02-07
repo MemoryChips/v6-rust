@@ -87,21 +87,35 @@ impl Shader {
     let f = File::open(filename)?;
     let reader = BufReader::new(f);
     let re = Regex::new(r"\#type (?P<type>.+)").unwrap();
+    let mut shader_source = String::with_capacity(512);
+    let mut current_shader_type: GLenum;
+    let mut working_on_type = false;
     for line in reader.lines() {
       match line {
         Ok(l) => {
           match re.captures(&l).and_then(|cap| cap.name("type")) {
-            Some(t) => println!("type: {:?}", t.as_str()),
-            _ => {}
+            Some(t) => {
+              if working_on_type {
+                println!("{}", shader_source);
+                shader_source = "".to_string();
+              }
+              working_on_type = true;
+              current_shader_type = shader_type(t.as_str());
+              println!("GLenum type: {} : {} ", t.as_str(), current_shader_type);
+            }
+            _ => {
+              if working_on_type {
+                shader_source += &l;
+                shader_source += &"\n";
+              }
+            }
           };
-          // println!("line: {:?}", t);
-          // let t = re
-          //   .captures(&l)
-          //   .and_then(|cap| cap.name("type").map(|t| t.as_str()));
-          // println!("line: {:?}", t);
         }
         Err(_e) => println!("Io error: {}", _e),
       }
+    }
+    if working_on_type {
+      println!("{}", shader_source);
     }
     Ok(())
   }
