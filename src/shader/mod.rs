@@ -270,9 +270,10 @@ mod tests {
     // let filepath = "/home/robert/Training/rust/v6/examples/sandbox/assets/shaders/flatcolor.glsl";
     let ss_map = super::Shader::read_shaders_from_file(filepath);
     for k in ss_map.keys() {
-      println!("Key: {}", k)
+      println!("Key: {}", k);
+      let valid_key = *k == 35632 || *k == 35633;
+      assert!(valid_key);
     }
-    assert_eq!("", filepath);
     // assert!(_app.is_running());
   }
 }
