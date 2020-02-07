@@ -58,7 +58,7 @@ impl Shader {
       gl::DeleteProgram(renderer_id);
     }
   }
-  fn delete_shader(program: u32, shader_ids: Vec<u32>) {
+  fn delete_shaders(program: u32, shader_ids: Vec<u32>) {
     unsafe {
       for shader_id in shader_ids {
         gl::DetachShader(program, shader_id);
@@ -244,14 +244,10 @@ pub fn link_program(sources: ShaderSources) -> GLuint {
       let error_info = info_log.to_string_lossy().into_owned();
       error!("[{}] Error info: {}", line!(), error_info);
       Shader::delete_program(program);
-      // FIXME: need these
-      Shader::delete_shader(program, shader_ids);
+      Shader::delete_shaders(program, shader_ids);
     } else {
       info!("Program link success: {}", program);
-      // FIXME: need these
-      Shader::delete_shader(program, shader_ids);
-      // Shader::delete_shader(program, vs);
-      // Shader::delete_shader(program, fs);
+      Shader::delete_shaders(program, shader_ids);
     }
 
     program
