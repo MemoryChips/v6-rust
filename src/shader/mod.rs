@@ -58,10 +58,13 @@ impl Shader {
       gl::DeleteProgram(renderer_id);
     }
   }
-  fn delete_shader(program: u32, shader_id: u32) {
+  fn delete_shader(program: u32, shader_ids: Vec<u32>) {
     unsafe {
-      gl::DetachShader(program, shader_id);
-      gl::DeleteShader(shader_id);
+      for shader_id in shader_ids {
+        gl::DetachShader(program, shader_id);
+        gl::DeleteShader(shader_id);
+        info!("Deleting shader id: {}", shader_id);
+      }
     }
   }
   fn read_shaders_from_file(filename: &str) -> ShaderSources {
@@ -193,9 +196,11 @@ fn compile_shader(src: &str, ty: GLenum) -> GLuint {
 pub fn link_program(sources: ShaderSources) -> GLuint {
   unsafe {
     let program = gl::CreateProgram();
+    let mut shader_ids: Vec<u32> = Vec::new();
     for (t, s) in &sources {
       // match
       let shader_id = compile_shader(s, *t);
+      shader_ids.push(shader_id);
       gl::AttachShader(program, shader_id);
     }
     // gl::AttachShader(program, vs);
@@ -239,12 +244,12 @@ pub fn link_program(sources: ShaderSources) -> GLuint {
       let error_info = info_log.to_string_lossy().into_owned();
       error!("[{}] Error info: {}", line!(), error_info);
       Shader::delete_program(program);
-    // FIXME: need these
-    // Shader::delete_shader(program, vs);
-    // Shader::delete_shader(program, fs);
+      // FIXME: need these
+      Shader::delete_shader(program, shader_ids);
     } else {
       info!("Program link success: {}", program);
       // FIXME: need these
+      Shader::delete_shader(program, shader_ids);
       // Shader::delete_shader(program, vs);
       // Shader::delete_shader(program, fs);
     }
