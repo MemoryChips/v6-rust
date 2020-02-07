@@ -2,10 +2,14 @@
 extern crate log;
 use log::{error, info};
 extern crate gl;
+extern crate regex;
+use regex::Regex;
 
 use gl::types::*;
 use std::ffi::CString;
-use std::fs;
+// use std::fs;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 use std::mem;
 use std::ptr;
 use std::str;
@@ -18,6 +22,36 @@ fn create_whitespace_cstring_with_len(len: usize) -> CString {
   // convert buffer to CString
   unsafe { CString::from_vec_unchecked(buffer) }
 }
+
+fn shader_type(s_type: &str) -> GLenum {
+  match s_type {
+    "vertex" => return gl::VERTEX_SHADER,
+    "fragment" | "pixel" => return gl::FRAGMENT_SHADER,
+    _ => return 0,
+  }
+}
+
+// fn preprocess(source: &String) {
+//   let file = BufRead::new(File::open(source)).unwrap();
+// let v: Vec<&str> = source.split("#type ").collect();
+// let re = Regex::new(r"(\s+)").unwrap();
+
+// for s in v {
+//   let t = re.captures(s).unwrap()[0];
+//   println!("{}: {}", t, s);
+// }
+// println!("0: {}", v[0]);
+// println!("1: {}", v[1]);
+// println!("2: {}", v[2]);
+// let re = Regex::new(r"(\#type )(.+)\n([\s\S]+)").unwrap();
+// // let re = Regex::new(r"(\#type )(.+\r\n)(.+)").unwrap();
+// for cap in re.captures_iter(source) {
+//   println!("{}", &cap[0]);
+//   println!("cap 1: {}", &cap[1]);
+//   println!("cap 2: {}", &cap[2]);
+//   println!("cap 3: {}", &cap[3]);
+// }
+// }
 
 pub struct Shader {
   name: String,
@@ -48,19 +82,28 @@ impl Shader {
       gl::DeleteShader(shader_id);
     }
   }
-  pub fn new_from_file(filename: &str) -> String {
+  pub fn new_from_file(filename: &str) -> std::io::Result<()> {
     println!("filepath: {}", filename);
-    // let contents = fs::read_to_string(filename).expect("Something went wrong reading the file");
-    match fs::read_to_string(filename) {
-      Ok(contents) => {
-        println!("contents: {}", contents);
-        return "shader source".to_string();
-      }
-      Err(e) => {
-        println!("Error: {}", e);
-        return "".to_string();
+    let f = File::open(filename)?;
+    let reader = BufReader::new(f);
+    let re = Regex::new(r"\#type (?P<type>.+)").unwrap();
+    for line in reader.lines() {
+      match line {
+        Ok(l) => {
+          match re.captures(&l).and_then(|cap| cap.name("type")) {
+            Some(t) => println!("type: {:?}", t.as_str()),
+            _ => {}
+          };
+          // println!("line: {:?}", t);
+          // let t = re
+          //   .captures(&l)
+          //   .and_then(|cap| cap.name("type").map(|t| t.as_str()));
+          // println!("line: {:?}", t);
+        }
+        Err(_e) => println!("Io error: {}", _e),
       }
     }
+    Ok(())
   }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
@@ -203,7 +246,7 @@ mod tests {
     let filepath = "./examples/sandbox/assets/shaders/flatcolor.glsl";
     // let filepath = "/home/robert/Training/rust/v6/examples/sandbox/assets/shaders/flatcolor.glsl";
     let ss = super::Shader::new_from_file(filepath);
-    assert_eq!(ss, filepath);
+    assert_eq!("", filepath);
     // assert!(_app.is_running());
   }
 }
