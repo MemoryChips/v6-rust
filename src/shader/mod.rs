@@ -110,34 +110,12 @@ impl Shader {
   }
   pub fn new(name: &str, vertex_src: &str, fragment_src: &str) -> Self {
     // TODO Convert this to accept a hashmap
-    let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
-    let fs = compile_shader(fragment_src, gl::FRAGMENT_SHADER);
-    let program = link_program(vs, fs);
-    unsafe {
-      let mut is_linked: GLint = 0;
-      gl::GetProgramiv(program, gl::LINK_STATUS, &mut is_linked);
-      if is_linked == gl::FALSE as GLint {
-        error!("Program link failure");
-        let mut max_length: GLint = 0;
-        gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut max_length);
-        let info_log = create_whitespace_cstring_with_len(max_length as usize);
-        gl::GetProgramInfoLog(
-          program,
-          max_length,
-          &mut max_length,
-          info_log.as_ptr() as *mut GLchar,
-        );
-        let error_info = info_log.to_string_lossy().into_owned();
-        error!("[{}] Error info: {}", line!(), error_info);
-        Shader::delete_program(program);
-        Shader::delete_shader(program, vs);
-        Shader::delete_shader(program, fs);
-      } else {
-        info!("Program link success: {}", program);
-        Shader::delete_shader(program, vs);
-        Shader::delete_shader(program, fs);
-      }
-    }
+    // let vs = compile_shader(vertex_src, gl::VERTEX_SHADER);
+    // let fs = compile_shader(fragment_src, gl::FRAGMENT_SHADER);
+    let mut sources: ShaderSources = HashMap::with_capacity(4);
+    sources.insert(gl::VERTEX_SHADER, vertex_src.to_string());
+    sources.insert(gl::FRAGMENT_SHADER, fragment_src.to_string());
+    let program = link_program(sources);
     let mut vao = 0;
     let mut vbo = 0;
     const VERTEX_DATA: [GLfloat; 6] = [0.0, 0.5, 0.5, -0.5, -0.5, -0.5]; // CONSIDER: pass this into new
@@ -211,11 +189,17 @@ fn compile_shader(src: &str, ty: GLenum) -> GLuint {
   }
   shader_int
 }
-pub fn link_program(vs: GLuint, fs: GLuint) -> GLuint {
+// pub fn link_program(vs: GLuint, fs: GLuint) -> GLuint {
+pub fn link_program(sources: ShaderSources) -> GLuint {
   unsafe {
     let program = gl::CreateProgram();
-    gl::AttachShader(program, vs);
-    gl::AttachShader(program, fs);
+    for (t, s) in &sources {
+      // match
+      let shader_id = compile_shader(s, *t);
+      gl::AttachShader(program, shader_id);
+    }
+    // gl::AttachShader(program, vs);
+    // gl::AttachShader(program, fs);
     gl::LinkProgram(program);
     // Get the link status
     let mut status = gl::FALSE as GLint;
@@ -239,6 +223,32 @@ pub fn link_program(vs: GLuint, fs: GLuint) -> GLuint {
           .expect("ProgramInfoLog not valid utf8")
       );
     }
+    let mut is_linked: GLint = 0;
+    gl::GetProgramiv(program, gl::LINK_STATUS, &mut is_linked);
+    if is_linked == gl::FALSE as GLint {
+      error!("Program link failure");
+      let mut max_length: GLint = 0;
+      gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut max_length);
+      let info_log = create_whitespace_cstring_with_len(max_length as usize);
+      gl::GetProgramInfoLog(
+        program,
+        max_length,
+        &mut max_length,
+        info_log.as_ptr() as *mut GLchar,
+      );
+      let error_info = info_log.to_string_lossy().into_owned();
+      error!("[{}] Error info: {}", line!(), error_info);
+      Shader::delete_program(program);
+    // FIXME: need these
+    // Shader::delete_shader(program, vs);
+    // Shader::delete_shader(program, fs);
+    } else {
+      info!("Program link success: {}", program);
+      // FIXME: need these
+      // Shader::delete_shader(program, vs);
+      // Shader::delete_shader(program, fs);
+    }
+
     program
   }
 }
