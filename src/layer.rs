@@ -19,10 +19,17 @@ impl LayerStack {
     layer.on_attach();
     self.layers.push(layer);
   }
-  //   void pushOverlay(Layer *overlay);
   //   void popLayer(Layer *layer);
   //   void popOverlay(Layer *overlay);
 }
+impl Drop for LayerStack {
+  fn drop(&mut self) {
+    for v in self.layers.iter() {
+      v.on_detach();
+    }
+  }
+}
+
 pub struct Layer {
   pub debug_name: String,
 }
@@ -33,16 +40,6 @@ impl Layer {
       debug_name: debug_name.to_string(),
     }
   }
-  // pub fn on_attach(&self) {
-  //   println!("default on_attach called for layer: {}", self.debug_name)
-  // }
-  // virtual void onDetach() {}
-  // virtual void onUpdate([[maybe_unused]] Timestep tf) {}
-  // virtual void onImGuiRender() {}
-  // virtual void onEvent([[maybe_unused]] Event &event) {}
-  // pub fn get_name(&self) -> &String {
-  //   &self.debug_name
-  // }
 }
 
 trait Attachable {
@@ -50,6 +47,12 @@ trait Attachable {
   fn on_attach(&self) {
     println!("default on_attach called for layer: {}", self.get_name());
   }
+  fn on_detach(&self) {
+    println!("default on_detach called for layer: {}", self.get_name());
+  }
+  // virtual void onUpdate([[maybe_unused]] Timestep tf) {}
+  // virtual void onImGuiRender() {}
+  // virtual void onEvent([[maybe_unused]] Event &event) {}
 }
 
 impl Attachable for Layer {
