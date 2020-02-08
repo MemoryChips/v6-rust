@@ -78,6 +78,12 @@ impl Layer for FancyLayer {
     // &String::new("Fancy")
     &self.debug_name
   }
+  fn on_attach(&self) {
+    println!(
+      "Fancy override on_attach called for layer: {}",
+      self.debug_name
+    )
+  }
 }
 
 #[cfg(test)]
@@ -101,9 +107,9 @@ mod tests {
     assert_eq!("Test Layer 2", test_layer_stack.layers[1].get_name());
     assert!(false);
   }
-  impl super::BasicLayer {
-    pub fn on_attach(&self) {
-      println!("override on_attach called for layer: {}", self.debug_name)
-    }
-  }
+  // impl super::BasicLayer {
+  //   pub fn on_attach(&self) {
+  //     println!("override on_attach called for layer: {}", self.debug_name)
+  //   }
+  // }
 }
