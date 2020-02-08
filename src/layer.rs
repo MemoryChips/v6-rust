@@ -79,9 +79,9 @@ mod tests {
     assert_eq!("Test Layer 2", test_layer_stack.layers[1].get_name());
     assert!(false);
   }
-  // impl super::Layer {
-  //   pub fn on_attach(&self) {
-  //     println!("override on_attach called for layer: {}", self.debug_name)
-  //   }
-  // }
+  impl super::Layer {
+    pub fn on_attach(&self) {
+      println!("override on_attach called for layer: {}", self.debug_name)
+    }
+  }
 }
