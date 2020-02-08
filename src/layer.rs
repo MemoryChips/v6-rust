@@ -54,12 +54,11 @@ mod tests {
     test_layer_stack.push_overlay(test_overlayer_a);
     test_layer_stack.push_layer(test_layer_2);
     test_layer_stack.push_overlay(test_overlayer_b);
-    for v in test_layer_stack.layers.iter_mut() {
+    for v in test_layer_stack.layers.iter() {
       println!("{}", v.get_name());
     }
     assert_eq!(2, test_layer_stack.layer_insert_index);
     assert_eq!("Test Layer 2", test_layer_stack.layers[1].get_name());
-    // note this for loop moves v out of the layers vector and does not give it back
     assert!(false);
   }
 }
