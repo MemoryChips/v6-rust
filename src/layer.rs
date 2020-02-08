@@ -61,6 +61,21 @@ impl Attachable for Layer {
   }
 }
 
+// trait FancyAttachable {
+//   fn get_name(&self) -> &String;
+//   fn on_attach(&self) {
+//     println!("default on_attach called for layer: {}", self.get_name());
+//   }
+//   fn on_detach(&self) {
+//     println!("default on_detach called for layer: {}", self.get_name());
+//   }
+// }
+// impl FancyAttachable for Layer {
+//   fn get_name(&self) -> &String {
+//     &self.debug_name
+//   }
+// }
+
 #[cfg(test)]
 mod tests {
   #[test]
