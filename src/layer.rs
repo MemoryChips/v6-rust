@@ -11,10 +11,12 @@ impl LayerStack {
     }
   }
   pub fn push_layer(&mut self, layer: Layer) {
+    layer.on_attach();
     self.layers.insert(self.layer_insert_index, layer);
     self.layer_insert_index += 1;
   }
   pub fn push_overlay(&mut self, layer: Layer) {
+    layer.on_attach();
     self.layers.push(layer);
   }
   //   void pushOverlay(Layer *overlay);
@@ -31,12 +33,27 @@ impl Layer {
       debug_name: debug_name.to_string(),
     }
   }
-  // virtual void onAttach() {}
+  // pub fn on_attach(&self) {
+  //   println!("default on_attach called for layer: {}", self.debug_name)
+  // }
   // virtual void onDetach() {}
   // virtual void onUpdate([[maybe_unused]] Timestep tf) {}
   // virtual void onImGuiRender() {}
   // virtual void onEvent([[maybe_unused]] Event &event) {}
-  pub fn get_name(&self) -> &String {
+  // pub fn get_name(&self) -> &String {
+  //   &self.debug_name
+  // }
+}
+
+trait Attachable {
+  fn get_name(&self) -> &String;
+  fn on_attach(&self) {
+    println!("default on_attach called for layer: {}", self.get_name());
+  }
+}
+
+impl Attachable for Layer {
+  fn get_name(&self) -> &String {
     &self.debug_name
   }
 }
@@ -45,6 +62,7 @@ impl Layer {
 mod tests {
   #[test]
   fn layer_insert_test() {
+    use super::Attachable;
     let test_layer_1 = super::Layer::new("Test Layer 1");
     let test_layer_2 = super::Layer::new("Test Layer 2");
     let test_overlayer_a = super::Layer::new("Test Overlay A");
@@ -61,4 +79,9 @@ mod tests {
     assert_eq!("Test Layer 2", test_layer_stack.layers[1].get_name());
     assert!(false);
   }
+  // impl super::Layer {
+  //   pub fn on_attach(&self) {
+  //     println!("override on_attach called for layer: {}", self.debug_name)
+  //   }
+  // }
 }
