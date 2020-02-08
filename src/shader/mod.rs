@@ -6,9 +6,8 @@ extern crate regex;
 use regex::Regex;
 
 use gl::types::*;
-use std::ffi::CString;
-// use std::fs;
 use std::collections::HashMap;
+use std::ffi::CString;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::mem;
@@ -200,7 +199,6 @@ fn compile_shader(src: &str, ty: GLenum) -> GLuint {
   }
   shader_int
 }
-// pub fn link_program(vs: GLuint, fs: GLuint) -> GLuint {
 pub fn link_program(sources: ShaderSources) -> GLuint {
   unsafe {
     let program = gl::CreateProgram();
@@ -267,13 +265,11 @@ mod tests {
   #[test]
   fn load_shader_file_test() {
     let filepath = "./examples/sandbox/assets/shaders/flatcolor.glsl";
-    // let filepath = "/home/robert/Training/rust/v6/examples/sandbox/assets/shaders/flatcolor.glsl";
     let ss_map = super::Shader::read_shaders_from_file(filepath);
     for k in ss_map.keys() {
       println!("Key: {}", k);
       let valid_key = *k == 35632 || *k == 35633;
       assert!(valid_key);
     }
-    // assert!(_app.is_running());
   }
 }
