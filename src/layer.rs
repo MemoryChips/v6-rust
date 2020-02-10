@@ -38,9 +38,11 @@ pub trait Layer {
   fn on_detach(&self) {
     println!("default on_detach called for layer: {}", self.get_name());
   }
-  // virtual void onUpdate([[maybe_unused]] Timestep tf) {}
+  fn on_update(&self, _tf: f32) {}
+  fn on_event(&self, _event: f64) {}
+  // fn onUpdate(tf: Timestep) {}
+  // fn onEvent(&_event Event) {}
   // virtual void onImGuiRender() {}
-  // virtual void onEvent([[maybe_unused]] Event &event) {}
 }
 
 pub struct BasicLayer {
@@ -85,9 +87,31 @@ mod tests {
       )
     }
   }
+  pub struct ExampleLayer {
+    debug_name: String,
+  }
+  impl ExampleLayer {
+    pub fn new() -> Box<Self> {
+      Box::new(Self {
+        debug_name: "Example Layer".to_string(),
+      })
+    }
+  }
+  impl super::Layer for ExampleLayer {
+    fn get_name(&self) -> &String {
+      &self.debug_name
+    }
+    fn on_attach(&self) {
+      println!(
+        "Fancy override on_attach called for layer: {}",
+        "Example Layer"
+      )
+    }
+  }
   #[test]
   fn layer_insert_test() {
     // use super::Layer;
+    let test_example_layer = ExampleLayer::new();
     let test_layer_1 = super::BasicLayer::new("Test Layer 1");
     let test_layer_2 = super::BasicLayer::new("Test Layer 2");
     let test_fancy_overlayer_a = FancyLayer::new("Test Overlay A");
@@ -97,6 +121,7 @@ mod tests {
     test_layer_stack.push_overlay(test_fancy_overlayer_a);
     test_layer_stack.push_layer(test_layer_2);
     test_layer_stack.push_overlay(test_overlayer_b);
+    test_layer_stack.push_layer(test_example_layer);
     test_layer_stack
       .layers
       .iter()
@@ -104,9 +129,10 @@ mod tests {
     for v in test_layer_stack.layers.iter() {
       println!("{}", v.get_name());
     }
-    assert_eq!(2, test_layer_stack.layer_insert_index);
+    assert_eq!(3, test_layer_stack.layer_insert_index);
     assert_eq!("Test Layer 2", test_layer_stack.layers[1].get_name());
-    assert!(false);
+    assert_eq!("Example Layer", test_layer_stack.layers[2].get_name());
+    // assert!(false);
   }
   // impl super::BasicLayer {
   //   pub fn on_attach(&self) {

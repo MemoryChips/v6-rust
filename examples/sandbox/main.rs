@@ -1,3 +1,5 @@
+mod example_layer;
+
 const DEMO_VERSION: &str = "1.0.0";
 
 fn main() {
@@ -10,6 +12,10 @@ fn main() {
     h: 400,
   };
   v6::info!("Demo Version: {}", DEMO_VERSION);
+
+  let layer_one = example_layer::ExampleLayer::new();
+
   let mut app = v6::App::new("Example App", w_props, 2);
+  app.layer_stack.push_layer(layer_one);
   app.run();
 }

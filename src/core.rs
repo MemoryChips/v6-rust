@@ -1,3 +1,4 @@
+use crate::layer::LayerStack;
 use crate::renderer;
 use crate::shader;
 use crate::timer::Timer;
@@ -26,7 +27,7 @@ pub struct App {
   running: bool,
   last_frame_time_sec: f64,
   duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
-  // layerStack: LayerStack,
+  pub layer_stack: LayerStack,
   pub window: Window,
 }
 impl App {
@@ -106,6 +107,7 @@ impl App {
       last_frame_time_sec: 0.0,
       duration_secs,
       window,
+      layer_stack: LayerStack::new(),
     };
     app
   }
