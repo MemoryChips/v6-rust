@@ -7,7 +7,7 @@ extern crate glfw;
 // CONSIDER: expose publically only what example needs
 mod core;
 mod renderer;
-mod shader;
+pub mod shader;
 // pub mod texture;
 pub mod layer;
 pub mod timer;

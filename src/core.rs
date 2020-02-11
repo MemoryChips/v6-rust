@@ -1,6 +1,6 @@
 use crate::layer::LayerStack;
 use crate::renderer;
-use crate::shader;
+// use crate::shader;
 use crate::timer::Timer;
 use crate::window::*;
 
@@ -36,8 +36,8 @@ impl App {
     self.running = true;
     info!("App name: {}", self.app_name);
 
-    let filepath = "./examples/sandbox/assets/shaders/simple-shader.glsl";
-    let _tri_shader = shader::Shader::new("tri shader", filepath);
+    // let filepath = "./examples/sandbox/assets/shaders/simple-shader.glsl";
+    // let _tri_shader = shader::Shader::new("tri shader", filepath);
     // let _tri_shader = shader::Shader::_new("tri shader", VS_SRC, FS_SRC);
 
     unsafe {

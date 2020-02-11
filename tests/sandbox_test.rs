@@ -9,9 +9,11 @@ fn sandbox_test() {
     w: 800,
     h: 600,
   };
-  let layer_one = ExampleLayer::new();
   let mut app = v6::App::new(title, w_props, 1);
+
+  let layer_one = ExampleLayer::new();
   app.layer_stack.push_layer(layer_one);
+
   app.run();
   assert_eq!(app.app_name, title);
   assert!(app.is_running());
