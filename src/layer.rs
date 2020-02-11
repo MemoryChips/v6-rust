@@ -38,7 +38,7 @@ pub trait Layer {
   fn on_detach(&self) {
     println!("default on_detach called for layer: {}", self.get_name());
   }
-  fn on_update(&self, _tf: f32) {}
+  fn on_update(&self, _tf: f64) {}
   fn on_event(&self, _event: f64) {}
   // fn onUpdate(tf: Timestep) {}
   // fn onEvent(&_event Event) {}

@@ -25,10 +25,7 @@ impl v6::layer::Layer for ExampleLayer {
       "Example Layer"
     )
   }
-  fn on_update(&self, _t: f32) {
-    println!(
-      "Fancy override on_update called for layer: {}",
-      "Example Layer"
-    )
+  fn on_update(&self, _ts: f64) {
+    println!("Example Layer on_update called for layer: {}", _ts)
   }
 }

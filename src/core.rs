@@ -77,7 +77,7 @@ impl App {
         .layer_stack
         .layers
         .iter()
-        .for_each(|s| s.on_update(1.0)); // TODO: Add timestep thing
+        .for_each(|s| s.on_update(time_step)); // TODO: Add timestep thing
       if self.window.window.should_close()
         || (self.duration_secs != 0 && stop_time < Instant::now())
       {
