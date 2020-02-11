@@ -2,15 +2,16 @@
 
 pub struct ExampleLayer {
   debug_name: String,
-  shader: v6::shader::Shader,
+  // shader: v6::shader::Shader, // CONSIDER: Any reason to keep shader around
 }
 impl ExampleLayer {
   pub fn new() -> Box<Self> {
     let filepath = "./tests/assets/shaders/simple-shader.glsl";
-    let shader = v6::shader::Shader::new("tri shader", filepath);
+    let _shader = v6::shader::Shader::new("tri shader", filepath);
+    // println!("tri shader / simple loaded: {:?}", &shader);
     Box::new(Self {
       debug_name: "Example Layer".to_string(),
-      shader,
+      // shader,
     })
   }
 }
@@ -21,6 +22,12 @@ impl v6::layer::Layer for ExampleLayer {
   fn on_attach(&self) {
     println!(
       "Fancy override on_attach called for layer: {}",
+      "Example Layer"
+    )
+  }
+  fn on_update(&self, _t: f32) {
+    println!(
+      "Fancy override on_update called for layer: {}",
       "Example Layer"
     )
   }

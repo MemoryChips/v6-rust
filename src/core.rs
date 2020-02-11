@@ -73,6 +73,11 @@ impl App {
         // Draw a triangle from the 3 vertices
         gl::DrawArrays(gl::TRIANGLES, 0, 3);
       }
+      self
+        .layer_stack
+        .layers
+        .iter()
+        .for_each(|s| s.on_update(1.0)); // TODO: Add timestep thing
       if self.window.window.should_close()
         || (self.duration_secs != 0 && stop_time < Instant::now())
       {
