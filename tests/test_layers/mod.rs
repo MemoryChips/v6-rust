@@ -26,6 +26,9 @@ impl v6::layer::Layer for ExampleLayer {
     )
   }
   fn on_update(&self, _ts: f64) {
-    println!("Example Layer on_update called for layer: {}", _ts)
+    println!(
+      "Example Layer on_update called for layer: {:.1} mS",
+      _ts * 1000.0
+    )
   }
 }
