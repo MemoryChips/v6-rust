@@ -5,7 +5,7 @@ extern crate glam;
 extern crate glfw;
 
 // CONSIDER: expose publically only what example needs
-mod core;
+mod app;
 mod renderer;
 pub mod shader;
 // pub mod texture;
@@ -14,7 +14,7 @@ pub mod timer;
 pub mod window; // CONSIDER: removing this from pub
 
 // CONSIDER: rename of core.rs
-pub use crate::core::App; // This needed crate for some reason
+pub use app::App; // This needed crate for some reason
 
 pub use log::Level::{Error, Info, Warn};
 pub use log::{error, info, warn};
