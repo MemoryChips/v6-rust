@@ -1,25 +1,11 @@
 use crate::layer::LayerStack;
 use crate::renderer;
-// use crate::shader;
 use crate::timer::Timer;
 use crate::window::*;
 
 use glam::vec4;
 
 use std::str;
-
-// static VS_SRC: &'static str = "
-// #version 150
-// in vec2 position;
-// void main() {
-//     gl_Position = vec4(position, 0.0, 1.0);
-// }";
-// static FS_SRC: &'static str = "
-// #version 150
-// out vec4 out_color;
-// void main() {
-//     out_color = vec4(1.0, 1.0, 0.0, 1.0);
-// }";
 
 pub struct App {
   pub app_name: String,
@@ -35,10 +21,6 @@ impl App {
     let _t = Timer::new("Run time");
     self.running = true;
     info!("App name: {}", self.app_name);
-
-    // let filepath = "./examples/sandbox/assets/shaders/simple-shader.glsl";
-    // let _tri_shader = shader::Shader::new("tri shader", filepath);
-    // let _tri_shader = shader::Shader::_new("tri shader", VS_SRC, FS_SRC);
 
     unsafe {
       renderer::api::init();
@@ -66,11 +48,8 @@ impl App {
         App::handle_window_event(&mut self.window.window, event);
       }
       unsafe {
-        // gl::ClearColor(0.3, 0.0, 0.3, 1.0);
         renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
         renderer::api::clear();
-        // gl::Clear(gl::COLOR_BUFFER_BIT);
-        // Draw a triangle from the 3 vertices
         gl::DrawArrays(gl::TRIANGLES, 0, 3);
       }
       self
@@ -104,7 +83,6 @@ impl App {
     self.window.window.set_should_close(true);
   }
   pub fn new(app_name: &str, props: WindowProps, duration_secs: u64) -> App {
-    // let (glfw, window, events) = App::glfw_init(&props);
     let window = Window::new(props);
     let app = App {
       app_name: app_name.to_string(),
