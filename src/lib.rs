@@ -13,8 +13,7 @@ pub mod layer;
 pub mod timer;
 pub mod window; // CONSIDER: removing this from pub
 
-// CONSIDER: rename of core.rs
-pub use app::App; // This needed crate for some reason
+pub use app::App;
 
 pub use log::Level::{Error, Info, Warn};
 pub use log::{error, info, warn};
