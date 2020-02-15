@@ -1,11 +1,11 @@
 use crate::layer::LayerStack;
-use crate::renderer;
 use crate::timer::Timer;
-use crate::window::*;
-
 use glam::vec4;
-
 use std::str;
+
+mod renderer;
+mod window;
+use window::*;
 
 pub struct App {
   pub app_name: String,
@@ -82,7 +82,12 @@ impl App {
   pub fn stop(&mut self) {
     self.window.window.set_should_close(true);
   }
-  pub fn new(app_name: &str, props: WindowProps, duration_secs: u64) -> App {
+  pub fn new(app_name: &str, w: u32, h: u32, duration_secs: u64) -> App {
+    let props = WindowProps {
+      title: app_name.to_string(),
+      w,
+      h,
+    };
     let window = Window::new(props);
     let app = App {
       app_name: app_name.to_string(),
