@@ -14,26 +14,6 @@ use std::mem;
 use std::ptr;
 use std::str;
 
-fn create_whitespace_cstring_with_len(len: usize) -> CString {
-  // allocate buffer of correct size
-  let mut buffer: Vec<u8> = Vec::with_capacity(len + 1);
-  // fill it with len spaces
-  buffer.extend([b' '].iter().cycle().take(len));
-  // convert buffer to CString
-  unsafe { CString::from_vec_unchecked(buffer) }
-}
-
-// CONSIDER: Move this inside Shader Impl
-fn shader_type(s_type: &str) -> GLenum {
-  match s_type {
-    "vertex" => return gl::VERTEX_SHADER,
-    "fragment" | "pixel" => return gl::FRAGMENT_SHADER,
-    _ => return 0,
-  }
-}
-
-type ShaderSources = HashMap<GLenum, String>;
-
 pub struct Shader {
   name: String,
   renderer_id: u32,
@@ -51,6 +31,7 @@ impl Drop for Shader {
   }
 }
 
+type ShaderSources = HashMap<GLenum, String>;
 impl Shader {
   fn delete_program(renderer_id: u32) {
     unsafe {
@@ -67,6 +48,13 @@ impl Shader {
     }
   }
   fn read_shaders_from_file(filename: &str) -> ShaderSources {
+    fn shader_type(s_type: &str) -> GLenum {
+      match s_type {
+        "vertex" => return gl::VERTEX_SHADER,
+        "fragment" | "pixel" => return gl::FRAGMENT_SHADER,
+        _ => return 0,
+      }
+    }
     println!("filepath: {}", filename);
     let mut shader_sources_map: ShaderSources = HashMap::with_capacity(4);
     match File::open(filename) {
@@ -200,6 +188,14 @@ fn compile_shader(src: &str, ty: GLenum) -> GLuint {
   shader_int
 }
 pub fn link_program(sources: ShaderSources) -> GLuint {
+  fn create_whitespace_cstring_with_len(len: usize) -> CString {
+    // allocate buffer of correct size
+    let mut buffer: Vec<u8> = Vec::with_capacity(len + 1);
+    // fill it with len spaces
+    buffer.extend([b' '].iter().cycle().take(len));
+    // convert buffer to CString
+    unsafe { CString::from_vec_unchecked(buffer) }
+  }
   unsafe {
     let program = gl::CreateProgram();
     let mut shader_ids: Vec<u32> = Vec::new();
