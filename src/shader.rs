@@ -3,6 +3,7 @@ extern crate log;
 use log::{error, info};
 extern crate gl;
 extern crate regex;
+use glam::{Mat4, Vec3, Vec4};
 use regex::Regex;
 
 use gl::types::*;
@@ -33,6 +34,58 @@ impl ShaderLibrary {
 pub struct Shader {
   name: String,
   renderer_id: u32,
+}
+
+trait ShaderCommands {
+  fn set_int(&self, name: &str, value: i32);
+  fn set_float(&self, name: &str, f: f32);
+  fn set_float3(&self, name: &str, v3: Vec3);
+  fn set_float4(&self, name: &str, v4: Vec4);
+  fn set_mat4(&self, name: &str, m4: Mat4);
+
+  // virtual void bind() const;
+  // virtual void unbind() const;
+
+  // virtual const std::string &getName() const;
+}
+
+impl ShaderCommands for Shader {
+  fn set_int(&self, name: &str, value: i32) {
+    unsafe {
+      let cstr = CString::new(name).expect("Cstring error.");
+      let location = gl::GetUniformLocation(self.renderer_id, cstr.as_ptr());
+      gl::Uniform1i(location, value);
+    }
+  }
+  fn set_float(&self, name: &str, f: f32) {
+    unsafe {
+      let cstr = CString::new(name).expect("Cstring error.");
+      let location = gl::GetUniformLocation(self.renderer_id, cstr.as_ptr());
+      gl::Uniform1f(location, f);
+    }
+  }
+  fn set_float3(&self, name: &str, v3: Vec3) {
+    unsafe {
+      let cstr = CString::new(name).expect("Cstring error.");
+      let location = gl::GetUniformLocation(self.renderer_id, cstr.as_ptr());
+      gl::Uniform3f(location, v3.x(), v3.y(), v3.z());
+    }
+  }
+  fn set_float4(&self, name: &str, v4: Vec4) {
+    unsafe {
+      let cstr = CString::new(name).expect("Cstring error.");
+      let location = gl::GetUniformLocation(self.renderer_id, cstr.as_ptr());
+      gl::Uniform4f(location, v4.x(), v4.y(), v4.z(), v4.w());
+    }
+  }
+  fn set_mat4(&self, name: &str, m4: Mat4) {
+    unsafe {
+      let cstr = CString::new(name).expect("Cstring error.");
+      let location = gl::GetUniformLocation(self.renderer_id, cstr.as_ptr());
+      let m4_ptr: *const Mat4 = &m4;
+      gl::UniformMatrix4fv(location, 1, 0, m4_ptr as *const f32); // TODO: Will this really work??                                                               // gl::UniformMatrix4fv(location, 1, GLboolean::False, m4.as_ptr());
+    }
+  }
 }
 
 impl Drop for Shader {
