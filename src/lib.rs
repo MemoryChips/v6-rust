@@ -4,14 +4,11 @@ extern crate gl;
 extern crate glam;
 extern crate glfw;
 
-// CONSIDER: expose publically only what example needs
 mod app;
-// mod renderer;
-pub mod shader;
-// pub mod texture;
 pub mod layer;
-pub mod timer;
-// pub mod window; // CONSIDER: removing this from pub
+pub mod shader;
+mod timer;
+// mod texture;
 
 pub use app::App;
 
