@@ -8,9 +8,8 @@ fn sandbox_test() {
   let h = 600;
   let mut app = v6::App::new(title, w, h, 1);
 
-  // let layer_one = ExampleLayer::new();
-  // app.layer_stack.push_layer(layer_one);
-
+  let mut shader_lib = v6::shader::ShaderLibrary::new();
+  shader_lib.add("simple", "./tests/assets/shaders/simple-shader.glsl");
   app.run();
   assert_eq!(app.app_name, title);
   assert!(app.is_running());

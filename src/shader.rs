@@ -14,6 +14,22 @@ use std::mem;
 use std::ptr;
 use std::str;
 
+pub struct ShaderLibrary {
+  lib: HashMap<String, Shader>,
+}
+
+impl ShaderLibrary {
+  pub fn new() -> Self {
+    ShaderLibrary {
+      lib: HashMap::new(),
+    }
+  }
+  pub fn add(&mut self, name: &str, file_path: &str) {
+    let s = Shader::new(name, file_path);
+    self.lib.insert(name.to_string(), s);
+  }
+}
+
 pub struct Shader {
   name: String,
   renderer_id: u32,

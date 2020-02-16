@@ -13,6 +13,12 @@ fn main() {
 
   let mut app = v6::App::new(title, w, h, 2);
 
+  let mut shader_lib = v6::shader::ShaderLibrary::new();
+  shader_lib.add(
+    "simple",
+    "./examples/sandbox/assets/shaders/simple-shader.glsl",
+  );
+  // shader_lib.add("simple", "./tests/assets/shaders/simple-shader.glsl");
   // let layer_one = example_layer::ExampleLayer::new();
   // app.layer_stack.push_layer(layer_one);
 
