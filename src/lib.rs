@@ -6,6 +6,7 @@ extern crate glfw;
 
 mod app;
 pub mod layer;
+pub mod render_command;
 pub mod shader;
 mod timer;
 // mod texture;
