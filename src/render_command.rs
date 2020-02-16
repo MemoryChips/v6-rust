@@ -25,6 +25,7 @@ mod tests {
       match c {
         // RenderCommand::Clear => println!("{}: Got a clear command", self.rend_type),
         RenderCommand::Clear => assert_eq!("FakeRend", self.rend_type),
+        RenderCommand::DrawTri => assert_eq!("FakeRend", self.rend_type),
         _ => assert!(false, "Got unknown render command"),
       }
     }

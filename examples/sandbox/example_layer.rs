@@ -15,27 +15,27 @@ impl ExampleLayer {
     })
   }
 }
-impl v6::layer::Layer for ExampleLayer {
-  fn get_name(&self) -> &String {
-    &self.debug_name
-  }
-  fn on_attach(&self) {
-    println!(
-      "Fancy override on_attach called for layer: {}",
-      "Example Layer"
-    )
-  }
-  fn on_update(&self, _ts: f64) {
-    static mut I: i32 = 0;
-    unsafe {
-      if I > 10 {
-        println!(
-          "Example Layer on_update called for layer: {:.1} mS",
-          _ts * 1000.0
-        );
-        I = 0;
-      }
-      I += 1;
-    }
-  }
-}
+// impl v6::layer::Layer for ExampleLayer {
+//   fn get_name(&self) -> &String {
+//     &self.debug_name
+//   }
+//   fn on_attach(&self) {
+//     println!(
+//       "Fancy override on_attach called for layer: {}",
+//       "Example Layer"
+//     )
+//   }
+//   fn on_update(&self, _ts: f64) {
+//     static mut I: i32 = 0;
+//     unsafe {
+//       if I > 10 {
+//         println!(
+//           "Example Layer on_update called for layer: {:.1} mS",
+//           _ts * 1000.0
+//         );
+//         I = 0;
+//       }
+//       I += 1;
+//     }
+//   }
+// }

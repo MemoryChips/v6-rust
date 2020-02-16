@@ -1,4 +1,4 @@
-mod example_layer;
+// mod example_layer;
 
 const DEMO_VERSION: &str = "1.0.0";
 
@@ -13,8 +13,8 @@ fn main() {
 
   let mut app = v6::App::new(title, w, h, 2);
 
-  let layer_one = example_layer::ExampleLayer::new();
-  app.layer_stack.push_layer(layer_one);
+  // let layer_one = example_layer::ExampleLayer::new();
+  // app.layer_stack.push_layer(layer_one);
 
   app.run();
 }
