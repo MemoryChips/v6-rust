@@ -10,15 +10,15 @@ use window::*;
 pub struct App {
   pub app_name: String,
   // imGuiLayer: ImGuiLayer,
-  running: bool,
+  pub running: bool,
   last_frame_time_sec: f64,
-  time_step: f64,
-  duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
+  pub time_step: f64,
+  pub duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
   pub layer_stack: LayerStack,
   pub window: Window,
 }
 impl App {
-  pub fn run(&mut self) {
+  pub fn run_deprecated(&mut self) {
     use std::time::Instant;
     let duration = std::time::Duration::from_secs(self.duration_secs);
     let stop_time = Instant::now() + duration;
@@ -33,7 +33,7 @@ impl App {
       if self.duration_secs != 0 && stop_time < Instant::now() {
         self.running = false;
       }
-      self.run_loop(0.0);
+      self.run_loop();
     }
   }
   pub fn update_time_step(&mut self) {
@@ -43,7 +43,7 @@ impl App {
       self.last_frame_time_sec = time;
     }
   }
-  pub fn run_loop(&mut self, _time_step: f64) {
+  pub fn run_loop(&mut self) {
     self.update_time_step();
     unsafe {
       renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
@@ -54,7 +54,7 @@ impl App {
       .layer_stack
       .layers
       .iter()
-      .for_each(|s| println!("{}", s.name));
+      .for_each(|s| println!("Upddate layer: {}", s.name));
     self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
     for (_, event) in glfw::flush_messages(&self.window.events) {
       App::handle_window_event(&mut self.window.window, event);

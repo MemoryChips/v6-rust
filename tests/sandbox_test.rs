@@ -10,7 +10,11 @@ fn sandbox_test() {
 
   let mut shader_lib = v6::shader::ShaderLibrary::new();
   shader_lib.add("simple", "./tests/assets/shaders/simple-shader.glsl");
-  app.run();
+  // app.run();
+  // TODO: Add auto close counter
+  while app.running {
+    app.run_loop();
+  }
   assert_eq!(app.app_name, title);
   // assert!(false);
 }

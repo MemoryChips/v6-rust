@@ -27,6 +27,22 @@ fn main() {
   app.layer_stack.push_layer(layer_one);
   {
     let _t = Timer::new("Run time");
-    app.run();
+    // app.run();
+    use std::time::Instant;
+    let duration = std::time::Duration::from_secs(app.duration_secs);
+    let stop_time = Instant::now() + duration;
+    let mut count_down = 0;
+
+    while app.running {
+      if count_down == 0 {
+        v6::info!("Frame time_step: {}", app.time_step);
+        count_down = 20;
+      }
+      count_down -= 1;
+      if app.duration_secs != 0 && stop_time < Instant::now() {
+        app.running = false;
+      }
+      app.run_loop();
+    }
   }
 }
