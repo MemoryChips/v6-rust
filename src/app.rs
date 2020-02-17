@@ -1,5 +1,5 @@
 use crate::layer::LayerStack;
-use crate::timer::Timer;
+// use crate::timer::Timer;
 use glam::vec4;
 use std::str;
 
@@ -10,7 +10,7 @@ use window::*;
 pub struct App {
   pub app_name: String,
   // imGuiLayer: ImGuiLayer,
-  running: bool,
+  // running: bool,
   last_frame_time_sec: f64,
   duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
   pub layer_stack: LayerStack,
@@ -18,9 +18,7 @@ pub struct App {
 }
 impl App {
   pub fn run(&mut self) {
-    let _t = Timer::new("Run time");
-    self.running = true;
-    info!("App name: {}", self.app_name);
+    // self.running = true;
 
     unsafe {
       renderer::api::init();
@@ -68,6 +66,11 @@ impl App {
       self.window.window.swap_buffers();
     }
   }
+  pub fn run_loop(&mut self, _time_step: f64) {
+    use glfw::Context; // needed for next line
+    self.window.window.swap_buffers();
+  }
+
   // CONSIDER: move this to Window.rs? Yes when OnUpdate is added
   fn handle_window_event(window: &mut glfw::Window, event: glfw::WindowEvent) {
     match event {
@@ -77,9 +80,9 @@ impl App {
       _ => {}
     }
   }
-  pub fn is_running(&self) -> bool {
-    self.running
-  }
+  // pub fn is_running(&self) -> bool {
+  //   self.running
+  // }
   pub fn stop(&mut self) {
     self.window.window.set_should_close(true);
   }
@@ -92,7 +95,7 @@ impl App {
     let window = Window::new(props);
     let app = App {
       app_name: app_name.to_string(),
-      running: false,
+      // running: false,
       last_frame_time_sec: 0.0,
       duration_secs,
       window,

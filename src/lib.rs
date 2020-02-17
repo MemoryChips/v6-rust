@@ -8,7 +8,7 @@ mod app;
 pub mod layer;
 pub mod render_command;
 pub mod shader;
-mod timer;
+pub mod timer;
 // mod texture;
 
 pub use app::App;

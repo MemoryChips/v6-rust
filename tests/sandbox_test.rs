@@ -12,6 +12,5 @@ fn sandbox_test() {
   shader_lib.add("simple", "./tests/assets/shaders/simple-shader.glsl");
   app.run();
   assert_eq!(app.app_name, title);
-  assert!(app.is_running());
   // assert!(false);
 }
