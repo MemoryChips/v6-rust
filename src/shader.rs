@@ -90,13 +90,13 @@ impl ShaderCommands for Shader {
 
 impl Drop for Shader {
   fn drop(&mut self) {
-    Shader::delete_program(self.renderer_id);
     info!(
-      "[{}] Shader struct dropped and program deleted: {} {}",
+      "[{}] Shader {} struct dropped with renderer_id: {}",
       line!(),
       self.name,
       self.renderer_id
     );
+    Shader::delete_program(self.renderer_id);
   }
 }
 

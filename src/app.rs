@@ -112,6 +112,6 @@ impl App {
 }
 impl Drop for App {
   fn drop(&mut self) {
-    println!("<{}> destructor for App called", self.app_name);
+    info!("Destructor for App <{}>  called", self.app_name);
   }
 }
