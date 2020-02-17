@@ -10,7 +10,7 @@ use window::*;
 pub struct App {
   pub app_name: String,
   // imGuiLayer: ImGuiLayer,
-  // running: bool,
+  running: bool,
   last_frame_time_sec: f64,
   duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
   pub layer_stack: LayerStack,
@@ -20,16 +20,12 @@ impl App {
   pub fn run(&mut self) {
     // self.running = true;
 
-    unsafe {
-      renderer::api::init();
-    } // CONSIDER: checking success
-
     use std::time::Instant;
     let duration = std::time::Duration::from_secs(self.duration_secs);
     let stop_time = Instant::now() + duration;
     let mut count_down = 0;
 
-    loop {
+    while self.running {
       let time_step: f64;
       unsafe {
         let time = glfw::ffi::glfwGetTime();
@@ -59,7 +55,8 @@ impl App {
       if self.window.window.should_close()
         || (self.duration_secs != 0 && stop_time < Instant::now())
       {
-        break;
+        self.running = false;
+        // break;
       }
       // CONSIDER: move this to window.rs? Yes when OnUpdate is added
       use glfw::Context; // needed for next line
@@ -95,12 +92,17 @@ impl App {
     let window = Window::new(props);
     let app = App {
       app_name: app_name.to_string(),
-      // running: false,
+      running: true,
       last_frame_time_sec: 0.0,
       duration_secs,
       window,
       layer_stack: LayerStack::new(),
     };
+
+    unsafe {
+      renderer::api::init();
+    } // CONSIDER: checking success
+
     app
   }
 }
