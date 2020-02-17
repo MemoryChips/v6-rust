@@ -37,9 +37,9 @@ impl App {
         count_down = 20;
       }
       count_down -= 1;
-      self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
-      for (_, event) in glfw::flush_messages(&self.window.events) {
-        App::handle_window_event(&mut self.window.window, event);
+      if self.duration_secs != 0 && stop_time < Instant::now() {
+        self.running = false;
+        // break;
       }
       unsafe {
         renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
@@ -50,8 +50,13 @@ impl App {
         .layer_stack
         .layers
         .iter()
-        .for_each(|s| println!("{}", s.name)); // TODO: Add timestep thing
-                                               // .for_each(|s| s.on_update(time_step)); // TODO: Add timestep thing
+        .for_each(|s| println!("{}", s.name));
+      // TODO: Add timestep thing
+      // .for_each(|s| s.on_update(time_step)); // TODO: Add timestep thing
+      self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
+      for (_, event) in glfw::flush_messages(&self.window.events) {
+        App::handle_window_event(&mut self.window.window, event);
+      }
       if self.window.window.should_close()
         || (self.duration_secs != 0 && stop_time < Instant::now())
       {
@@ -64,6 +69,24 @@ impl App {
     }
   }
   pub fn run_loop(&mut self, _time_step: f64) {
+    unsafe {
+      renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
+      renderer::api::clear();
+      gl::DrawArrays(gl::TRIANGLES, 0, 3);
+    }
+    self
+      .layer_stack
+      .layers
+      .iter()
+      .for_each(|s| println!("{}", s.name));
+    self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
+    for (_, event) in glfw::flush_messages(&self.window.events) {
+      App::handle_window_event(&mut self.window.window, event);
+    }
+    if self.window.window.should_close() {
+      self.running = false;
+      // break;
+    }
     use glfw::Context; // needed for next line
     self.window.window.swap_buffers();
   }
