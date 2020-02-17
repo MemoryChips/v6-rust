@@ -19,55 +19,21 @@ pub struct App {
 }
 impl App {
   pub fn run(&mut self) {
-    // self.running = true;
-
     use std::time::Instant;
     let duration = std::time::Duration::from_secs(self.duration_secs);
     let stop_time = Instant::now() + duration;
     let mut count_down = 0;
 
     while self.running {
-      let time_step: f64;
-      unsafe {
-        let time = glfw::ffi::glfwGetTime();
-        time_step = time - self.last_frame_time_sec;
-        self.last_frame_time_sec = time;
-      }
       if count_down == 0 {
-        info!("Frame time_step: {}", time_step);
+        info!("Frame time_step: {}", self.time_step);
         count_down = 20;
       }
       count_down -= 1;
       if self.duration_secs != 0 && stop_time < Instant::now() {
         self.running = false;
-        // break;
       }
       self.run_loop(0.0);
-      // unsafe {
-      //   renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
-      //   renderer::api::clear();
-      //   gl::DrawArrays(gl::TRIANGLES, 0, 3);
-      // }
-      // self
-      //   .layer_stack
-      //   .layers
-      //   .iter()
-      //   .for_each(|s| println!("{}", s.name));
-      // // TODO: Add timestep thing
-      // // .for_each(|s| s.on_update(time_step)); // TODO: Add timestep thing
-      // self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
-      // for (_, event) in glfw::flush_messages(&self.window.events) {
-      //   App::handle_window_event(&mut self.window.window, event);
-      // }
-      // if self.window.window.should_close()
-      //   || (self.duration_secs != 0 && stop_time < Instant::now())
-      // {
-      //   self.running = false;
-      //   // break;
-      // }
-      // // CONSIDER: move this to window.rs? Yes when OnUpdate is added
-      // use glfw::Context; // needed for next line
-      // self.window.window.swap_buffers();
     }
   }
   pub fn update_time_step(&mut self) {
@@ -78,6 +44,7 @@ impl App {
     }
   }
   pub fn run_loop(&mut self, _time_step: f64) {
+    self.update_time_step();
     unsafe {
       renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
       renderer::api::clear();
