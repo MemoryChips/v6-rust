@@ -12,6 +12,7 @@ pub struct App {
   // imGuiLayer: ImGuiLayer,
   running: bool,
   last_frame_time_sec: f64,
+  time_step: f64,
   duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
   pub layer_stack: LayerStack,
   pub window: Window,
@@ -41,31 +42,39 @@ impl App {
         self.running = false;
         // break;
       }
-      unsafe {
-        renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
-        renderer::api::clear();
-        gl::DrawArrays(gl::TRIANGLES, 0, 3);
-      }
-      self
-        .layer_stack
-        .layers
-        .iter()
-        .for_each(|s| println!("{}", s.name));
-      // TODO: Add timestep thing
-      // .for_each(|s| s.on_update(time_step)); // TODO: Add timestep thing
-      self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
-      for (_, event) in glfw::flush_messages(&self.window.events) {
-        App::handle_window_event(&mut self.window.window, event);
-      }
-      if self.window.window.should_close()
-        || (self.duration_secs != 0 && stop_time < Instant::now())
-      {
-        self.running = false;
-        // break;
-      }
-      // CONSIDER: move this to window.rs? Yes when OnUpdate is added
-      use glfw::Context; // needed for next line
-      self.window.window.swap_buffers();
+      self.run_loop(0.0);
+      // unsafe {
+      //   renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
+      //   renderer::api::clear();
+      //   gl::DrawArrays(gl::TRIANGLES, 0, 3);
+      // }
+      // self
+      //   .layer_stack
+      //   .layers
+      //   .iter()
+      //   .for_each(|s| println!("{}", s.name));
+      // // TODO: Add timestep thing
+      // // .for_each(|s| s.on_update(time_step)); // TODO: Add timestep thing
+      // self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
+      // for (_, event) in glfw::flush_messages(&self.window.events) {
+      //   App::handle_window_event(&mut self.window.window, event);
+      // }
+      // if self.window.window.should_close()
+      //   || (self.duration_secs != 0 && stop_time < Instant::now())
+      // {
+      //   self.running = false;
+      //   // break;
+      // }
+      // // CONSIDER: move this to window.rs? Yes when OnUpdate is added
+      // use glfw::Context; // needed for next line
+      // self.window.window.swap_buffers();
+    }
+  }
+  pub fn update_time_step(&mut self) {
+    unsafe {
+      let time = glfw::ffi::glfwGetTime();
+      self.time_step = time - self.last_frame_time_sec;
+      self.last_frame_time_sec = time;
     }
   }
   pub fn run_loop(&mut self, _time_step: f64) {
@@ -117,6 +126,7 @@ impl App {
       app_name: app_name.to_string(),
       running: true,
       last_frame_time_sec: 0.0,
+      time_step: 0.0,
       duration_secs,
       window,
       layer_stack: LayerStack::new(),
