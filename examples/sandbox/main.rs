@@ -16,8 +16,8 @@ fn main() {
   v6::info!("App name: {}", app.app_name);
 
   // CONSIDER: move shader library setup inside app
-  let mut shader_lib = v6::shader::ShaderLibrary::new();
-  shader_lib.add(
+  // let mut shader_lib = v6::shader::ShaderLibrary::new();
+  app.shader_lib.add(
     "simple",
     "./examples/sandbox/assets/shaders/simple-shader.glsl",
   );
