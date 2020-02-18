@@ -16,12 +16,15 @@ fn main() {
   v6::info!("App name: {}", app.app_name);
 
   // CONSIDER: move shader library setup inside app
-  // let mut shader_lib = v6::shader::ShaderLibrary::new();
-  app.shader_lib.add(
+  // app.shader_lib.add(
+  //   "simple",
+  //   "./examples/sandbox/assets/shaders/simple-shader.glsl",
+  // );
+  let mut shader_lib = v6::shader::ShaderLibrary::new();
+  shader_lib.add(
     "simple",
     "./examples/sandbox/assets/shaders/simple-shader.glsl",
   );
-  // shader_lib.add("simple", "./tests/assets/shaders/simple-shader.glsl");
 
   let layer_one = layer::Layer::new();
   app.layer_stack.push_layer(layer_one);

@@ -1,5 +1,5 @@
 use crate::layer::LayerStack;
-use crate::shader::ShaderLibrary;
+// use crate::shader::ShaderLibrary;
 
 // use crate::timer::Timer;
 use glam::vec4;
@@ -18,7 +18,7 @@ pub struct App {
   pub duration_secs: u64, // Eventually remove when app runs in its own thread OR stop runs in its own thread
   pub layer_stack: LayerStack,
   pub window: Window,
-  pub shader_lib: ShaderLibrary,
+  // pub shader_lib: ShaderLibrary,
 }
 impl App {
   pub fn run_deprecated(&mut self) {
@@ -100,7 +100,7 @@ impl App {
       duration_secs,
       window,
       layer_stack: LayerStack::new(),
-      shader_lib: ShaderLibrary::new(),
+      // shader_lib: ShaderLibrary::new(),
     };
 
     unsafe {

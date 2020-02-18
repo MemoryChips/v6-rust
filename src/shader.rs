@@ -103,11 +103,12 @@ impl Drop for Shader {
 type ShaderSources = HashMap<GLenum, String>;
 impl Shader {
   fn delete_program(renderer_id: u32) {
-    println!("Request to delete program skipped: {}", renderer_id);
-    // CONSIDER: try deleteing program when window is deleted
-    // unsafe {
-    //   gl::DeleteProgram(renderer_id);
-    // }
+    // println!("Request to delete program skipped: {}", renderer_id);
+    // // CONSIDER: try deleteing program when window is deleted if shader lib is put inside app
+    println!("Request to delete program about to be run: {}", renderer_id);
+    unsafe {
+      gl::DeleteProgram(renderer_id);
+    }
   }
   fn delete_shaders(program: u32, shader_ids: Vec<u32>) {
     unsafe {
