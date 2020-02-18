@@ -104,6 +104,7 @@ type ShaderSources = HashMap<GLenum, String>;
 impl Shader {
   fn delete_program(renderer_id: u32) {
     println!("Request to delete program skipped: {}", renderer_id);
+    // CONSIDER: try deleteing program when window is deleted
     // unsafe {
     //   gl::DeleteProgram(renderer_id);
     // }
