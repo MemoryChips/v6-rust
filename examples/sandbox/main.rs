@@ -15,7 +15,7 @@ fn main() {
   let mut app = v6::App::new(title, w, h, 2);
   v6::info!("App name: {}", app.app_name);
 
-  // CONSIDER: move shader library setup inside app
+  // CONSIDER: move shader library setup inside app but this causes crash when program is deleted
   // app.shader_lib.add(
   //   "simple",
   //   "./examples/sandbox/assets/shaders/simple-shader.glsl",
