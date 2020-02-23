@@ -66,6 +66,9 @@ impl App {
           match c {
             RenderCommand::Clear => println!("Got a render clear command",),
             RenderCommand::DrawTri => println!("Got a render drawtri command",),
+            RenderCommand::SetClearColor { color } => {
+              println!("Got a render drawtri command: {}", color)
+            }
             _ => println!("Got an unknown render command",),
           }
         })
