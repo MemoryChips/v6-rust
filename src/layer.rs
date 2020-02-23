@@ -52,6 +52,9 @@ impl Layer {
   pub fn on_detach(&self) {
     println!("Layer detached: {}", self.name)
   }
+  pub fn add_render_command(&mut self, c: RenderCommand) {
+    self.command_list.push(c);
+  }
 }
 
 #[cfg(test)]
