@@ -1,5 +1,6 @@
 use v6::layer;
 // use v6::render_command;
+use glam::Vec4;
 use v6::render_command::RenderCommand;
 use v6::timer::Timer;
 
@@ -31,6 +32,8 @@ fn main() {
   let mut layer_one = layer::Layer::new();
   // insert a layer renderer command here
   layer_one.add_render_command(RenderCommand::Clear);
+  let color = Vec4::zero();
+  layer_one.add_render_command(RenderCommand::SetClearColor { color });
   app.layer_stack.push_layer(layer_one);
   {
     let _t = Timer::new("Run time");

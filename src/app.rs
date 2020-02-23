@@ -66,7 +66,7 @@ impl App {
           match c {
             RenderCommand::Clear => println!("Got a render clear command",),
             RenderCommand::DrawTri => println!("Got a render drawtri command",),
-            _ => println!("Got a render command",),
+            _ => println!("Got an unknown render command",),
           }
         })
       });
