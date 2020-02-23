@@ -27,6 +27,7 @@ fn main() {
   );
 
   let layer_one = layer::Layer::new();
+  // insert a layer renderer command here
   app.layer_stack.push_layer(layer_one);
   {
     let _t = Timer::new("Run time");

@@ -5,6 +5,8 @@ use crate::layer::LayerStack;
 use glam::vec4;
 use std::str;
 
+use crate::render_command::RenderCommand;
+
 mod renderer;
 mod window;
 use window::*;
@@ -57,7 +59,17 @@ impl App {
       .layer_stack
       .layers
       .iter()
-      .for_each(|s| println!("Upddate layer: {}", s.name));
+      // .for_each(|s| println!("Upddate layer: {}", s.name)); // TODO: Replace this with calls to Renderer from the command list
+      .for_each(|l| {
+        l.command_list.iter().for_each(|c| {
+          // println!("Command")
+          match c {
+            RenderCommand::Clear => println!("Got a render clear command",),
+            RenderCommand::DrawTri => println!("Got a render drawtri command",),
+            _ => println!("Got a render command",),
+          }
+        })
+      });
     self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
     for (_, event) in glfw::flush_messages(&self.window.events) {
       App::handle_window_event(&mut self.window.window, event);
