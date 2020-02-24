@@ -30,8 +30,11 @@ fn main() {
   );
 
   let mut layer_one = layer::Layer::new();
-  // insert a layer renderer command here
-  let color = Vec4::one();
+  // let mut color = Vec4::zero();
+  // color.set_w(1.0);
+  // color.set_x(1.0);
+  let color = Vec4::new(0.0, 1.0, 1.0, 1.0);
+
   layer_one.add_render_command(RenderCommand::SetClearColor { color });
   layer_one.add_render_command(RenderCommand::Clear);
   layer_one.add_render_command(RenderCommand::DrawTri);
