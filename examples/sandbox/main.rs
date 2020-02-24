@@ -31,9 +31,9 @@ fn main() {
 
   let mut layer_one = layer::Layer::new();
   // insert a layer renderer command here
-  layer_one.add_render_command(RenderCommand::Clear);
-  let color = Vec4::zero();
+  let color = Vec4::one();
   layer_one.add_render_command(RenderCommand::SetClearColor { color });
+  layer_one.add_render_command(RenderCommand::Clear);
   app.layer_stack.push_layer(layer_one);
   {
     let _t = Timer::new("Run time");

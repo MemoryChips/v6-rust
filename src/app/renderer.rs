@@ -22,11 +22,15 @@ pub mod api {
   pub unsafe fn set_viewport(x: i32, y: i32, w: i32, h: i32) {
     gl::Viewport(x, y, w, h);
   }
-  pub unsafe fn set_clear_color(color: &Vec4) {
-    gl::ClearColor(color.x(), color.y(), color.z(), color.w());
+  pub fn set_clear_color(color: &Vec4) {
+    unsafe {
+      gl::ClearColor(color.x(), color.y(), color.z(), color.w());
+    }
   }
-  pub unsafe fn clear() {
-    gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+  pub fn clear() {
+    unsafe {
+      gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+    }
   }
 }
 

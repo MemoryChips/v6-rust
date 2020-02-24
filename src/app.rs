@@ -2,7 +2,7 @@ use crate::layer::LayerStack;
 // use crate::shader::ShaderLibrary;
 
 // use crate::timer::Timer;
-use glam::vec4;
+// use glam::vec4;
 use std::str;
 
 use crate::render_command::RenderCommand;
@@ -23,24 +23,6 @@ pub struct App {
   // pub shader_lib: ShaderLibrary,
 }
 impl App {
-  pub fn run_deprecated(&mut self) {
-    use std::time::Instant;
-    let duration = std::time::Duration::from_secs(self.duration_secs);
-    let stop_time = Instant::now() + duration;
-    let mut count_down = 0;
-
-    while self.running {
-      if count_down == 0 {
-        info!("Frame time_step: {}", self.time_step);
-        count_down = 20;
-      }
-      count_down -= 1;
-      if self.duration_secs != 0 && stop_time < Instant::now() {
-        self.running = false;
-      }
-      self.run_loop();
-    }
-  }
   pub fn update_time_step(&mut self) {
     unsafe {
       let time = glfw::ffi::glfwGetTime();
@@ -50,29 +32,22 @@ impl App {
   }
   pub fn run_loop(&mut self) {
     self.update_time_step();
+    self.layer_stack.layers.iter().for_each(|l| {
+      l.command_list.iter().for_each(|c| {
+        // println!("Command")
+        match c {
+          RenderCommand::DrawTri => println!("Got a render drawtri command",),
+          RenderCommand::Clear => renderer::api::clear(),
+          RenderCommand::SetClearColor { color } => renderer::api::set_clear_color(color),
+          _ => println!("Got an unknown render command",),
+        }
+      })
+    });
     unsafe {
-      renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
-      renderer::api::clear();
+      // renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
+      // renderer::api::clear();
       gl::DrawArrays(gl::TRIANGLES, 0, 3);
     }
-    self
-      .layer_stack
-      .layers
-      .iter()
-      // .for_each(|s| println!("Upddate layer: {}", s.name)); // TODO: Replace this with calls to Renderer from the command list
-      .for_each(|l| {
-        l.command_list.iter().for_each(|c| {
-          // println!("Command")
-          match c {
-            RenderCommand::Clear => println!("Got a render clear command",),
-            RenderCommand::DrawTri => println!("Got a render drawtri command",),
-            RenderCommand::SetClearColor { color } => {
-              println!("Got a render drawtri command: {}", color)
-            }
-            _ => println!("Got an unknown render command",),
-          }
-        })
-      });
     self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
     for (_, event) in glfw::flush_messages(&self.window.events) {
       App::handle_window_event(&mut self.window.window, event);
