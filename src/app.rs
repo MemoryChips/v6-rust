@@ -32,22 +32,19 @@ impl App {
   }
   pub fn run_loop(&mut self) {
     self.update_time_step();
+
     self.layer_stack.layers.iter().for_each(|l| {
       l.command_list.iter().for_each(|c| {
         // println!("Command")
         match c {
-          RenderCommand::DrawTri => println!("Got a render drawtri command",),
+          RenderCommand::DrawTri => renderer::api::draw_tri(),
           RenderCommand::Clear => renderer::api::clear(),
           RenderCommand::SetClearColor { color } => renderer::api::set_clear_color(color),
           _ => println!("Got an unknown render command",),
         }
       })
     });
-    unsafe {
-      // renderer::api::set_clear_color(&vec4(0.3, 0.7, 0.3, 1.0));
-      // renderer::api::clear();
-      gl::DrawArrays(gl::TRIANGLES, 0, 3);
-    }
+
     self.window.glfw.poll_events(); // CONSIDER: move this when onUpdate is created
     for (_, event) in glfw::flush_messages(&self.window.events) {
       App::handle_window_event(&mut self.window.window, event);

@@ -22,6 +22,11 @@ pub mod api {
   pub unsafe fn set_viewport(x: i32, y: i32, w: i32, h: i32) {
     gl::Viewport(x, y, w, h);
   }
+  pub fn draw_tri() {
+    unsafe {
+      gl::DrawArrays(gl::TRIANGLES, 0, 3);
+    }
+  }
   pub fn set_clear_color(color: &Vec4) {
     unsafe {
       gl::ClearColor(color.x(), color.y(), color.z(), color.w());

@@ -34,6 +34,7 @@ fn main() {
   let color = Vec4::one();
   layer_one.add_render_command(RenderCommand::SetClearColor { color });
   layer_one.add_render_command(RenderCommand::Clear);
+  layer_one.add_render_command(RenderCommand::DrawTri);
   app.layer_stack.push_layer(layer_one);
   {
     let _t = Timer::new("Run time");
