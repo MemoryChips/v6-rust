@@ -100,6 +100,40 @@ impl Drop for Shader {
   }
 }
 
+fn setup_drawtri(program: u32) {
+  let mut vao = 0;
+  let mut vbo = 0;
+  const VERTEX_DATA: [GLfloat; 6] = [0.0, 0.5, 0.5, -0.5, -0.5, -0.5]; // CONSIDER: pass this into new
+  unsafe {
+    // Create Vertex Array Object
+    gl::GenVertexArrays(1, &mut vao);
+    gl::BindVertexArray(vao);
+    // Create a Vertex Buffer Object and copy the vertex data to it
+    gl::GenBuffers(1, &mut vbo);
+    gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
+    gl::BufferData(
+      gl::ARRAY_BUFFER,
+      (VERTEX_DATA.len() * mem::size_of::<GLfloat>()) as GLsizeiptr,
+      mem::transmute(&VERTEX_DATA[0]),
+      gl::STATIC_DRAW,
+    );
+    // Use shader program
+    gl::UseProgram(program);
+    gl::BindFragDataLocation(program, 0, CString::new("out_color").unwrap().as_ptr());
+    // Specify the layout of the vertex data
+    let pos_attr = gl::GetAttribLocation(program, CString::new("position").unwrap().as_ptr());
+    gl::EnableVertexAttribArray(pos_attr as GLuint);
+    gl::VertexAttribPointer(
+      pos_attr as GLuint,
+      2,
+      gl::FLOAT,
+      gl::FALSE as GLboolean,
+      0,
+      ptr::null(),
+    );
+  }
+}
+
 type ShaderSources = HashMap<GLenum, String>;
 impl Shader {
   fn delete_program(renderer_id: u32) {
@@ -182,41 +216,8 @@ impl Shader {
     Shader::new_from_sources(name, sources)
   }
   fn new_from_sources(name: &str, sources: ShaderSources) -> Self {
-    // let mut sources: ShaderSources = HashMap::with_capacity(4);
-    // sources.insert(gl::VERTEX_SHADER, vertex_src.to_string());
-    // sources.insert(gl::FRAGMENT_SHADER, fragment_src.to_string());
     let program = link_program(sources);
-    let mut vao = 0;
-    let mut vbo = 0;
-    const VERTEX_DATA: [GLfloat; 6] = [0.0, 0.5, 0.5, -0.5, -0.5, -0.5]; // CONSIDER: pass this into new
-    unsafe {
-      // Create Vertex Array Object
-      gl::GenVertexArrays(1, &mut vao);
-      gl::BindVertexArray(vao);
-      // Create a Vertex Buffer Object and copy the vertex data to it
-      gl::GenBuffers(1, &mut vbo);
-      gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
-      gl::BufferData(
-        gl::ARRAY_BUFFER,
-        (VERTEX_DATA.len() * mem::size_of::<GLfloat>()) as GLsizeiptr,
-        mem::transmute(&VERTEX_DATA[0]),
-        gl::STATIC_DRAW,
-      );
-      // Use shader program
-      gl::UseProgram(program);
-      gl::BindFragDataLocation(program, 0, CString::new("out_color").unwrap().as_ptr());
-      // Specify the layout of the vertex data
-      let pos_attr = gl::GetAttribLocation(program, CString::new("position").unwrap().as_ptr());
-      gl::EnableVertexAttribArray(pos_attr as GLuint);
-      gl::VertexAttribPointer(
-        pos_attr as GLuint,
-        2,
-        gl::FLOAT,
-        gl::FALSE as GLboolean,
-        0,
-        ptr::null(),
-      );
-    }
+    setup_drawtri(program);
     let s = Shader {
       name: name.to_string(),
       renderer_id: program,
