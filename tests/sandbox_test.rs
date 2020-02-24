@@ -12,6 +12,9 @@ fn sandbox_test() {
   shader_lib.add("simple", "./tests/assets/shaders/simple-shader.glsl");
   // app.run();
   let mut count: i32 = 0;
+
+  // TODO: Copy example app here to make a good test
+
   while app.running && count < 100 {
     count += 1;
     app.run_loop();
