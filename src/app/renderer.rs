@@ -13,10 +13,38 @@ pub fn create_mat4_f(f: f32) -> Mat4 {
 
 pub mod api {
   use glam::Vec4;
+
+  use std::os::raw::c_char;
+  use std::os::raw::c_void;
+  #[no_mangle]
+  extern "system" fn debug_callback(
+    _: gl::types::GLenum,
+    err_type: gl::types::GLenum,
+    id: gl::types::GLuint,
+    severity: gl::types::GLenum,
+    _: gl::types::GLsizei,
+    message: *const c_char,
+    _: *mut c_void,
+  ) {
+    unsafe {
+      let err_text = std::ffi::CStr::from_ptr(message);
+      println!(
+        "Type: {:#x} ID: {:#x} Severity: {:#x}:\n  {:#?}",
+        err_type,
+        id,
+        severity,
+        err_text.to_str().unwrap()
+      )
+    }
+  }
+
   pub unsafe fn init() {
     gl::Enable(gl::BLEND);
     gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
     // gl::Enable(gl::DEPTH_TEST);
+    // TODO: enable debug message callback
+    gl::DebugMessageCallback(Some(debug_callback), std::ptr::null());
+    // gl::DebugMessageCallback(std::mem::transmute(debug_callback), std::ptr::null());
   }
   #[allow(dead_code)]
   pub unsafe fn set_viewport(x: i32, y: i32, w: i32, h: i32) {
