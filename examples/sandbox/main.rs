@@ -1,6 +1,5 @@
-use v6::layer;
-// use v6::render_command;
 use glam::Vec4;
+use v6::layer;
 use v6::render_command::RenderCommand;
 use v6::timer::Timer;
 
@@ -41,7 +40,6 @@ fn main() {
   app.layer_stack.push_layer(layer_one);
   {
     let _t = Timer::new("Run time");
-    // app.run();
     use std::time::Instant;
     let duration = std::time::Duration::from_secs(app.duration_secs);
     let stop_time = Instant::now() + duration;

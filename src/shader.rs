@@ -117,7 +117,8 @@ fn setup_drawtri(program: u32) {
       mem::transmute(&VERTEX_DATA[0]),
       gl::STATIC_DRAW,
     );
-    // Use shader program
+    // Use shader program - This seems to be the bind function
+    // to unbind call UseProgram(0)
     gl::UseProgram(program);
     gl::BindFragDataLocation(program, 0, CString::new("out_color").unwrap().as_ptr());
     // Specify the layout of the vertex data
@@ -139,6 +140,7 @@ impl Shader {
   fn delete_program(renderer_id: u32) {
     // println!("Request to delete program skipped: {}", renderer_id);
     // // CONSIDER: try deleteing program when window is deleted if shader lib is put inside app
+    // // CONSIDER: try unbinding program before deleting it
     println!("Request to delete program about to be run: {}", renderer_id);
     unsafe {
       gl::DeleteProgram(renderer_id);

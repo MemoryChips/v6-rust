@@ -1,8 +1,5 @@
 use crate::layer::LayerStack;
-// use crate::shader::ShaderLibrary;
 
-// use crate::timer::Timer;
-// use glam::vec4;
 use std::str;
 
 use crate::render_command::RenderCommand;
@@ -34,14 +31,11 @@ impl App {
     self.update_time_step();
 
     self.layer_stack.layers.iter().for_each(|l| {
-      l.command_list.iter().for_each(|c| {
-        // println!("Command")
-        match c {
-          RenderCommand::DrawTri => renderer::api::draw_tri(),
-          RenderCommand::Clear => renderer::api::clear(),
-          RenderCommand::SetClearColor { color } => renderer::api::set_clear_color(color),
-          _ => println!("Got an unknown render command",),
-        }
+      l.command_list.iter().for_each(|c| match c {
+        RenderCommand::DrawTri => renderer::api::draw_tri(),
+        RenderCommand::Clear => renderer::api::clear(),
+        RenderCommand::SetClearColor { color } => renderer::api::set_clear_color(color),
+        _ => println!("Got an unknown render command",),
       })
     });
 
@@ -66,9 +60,6 @@ impl App {
       _ => {}
     }
   }
-  // pub fn is_running(&self) -> bool {
-  //   self.running
-  // }
   pub fn stop(&mut self) {
     self.window.window.set_should_close(true);
   }

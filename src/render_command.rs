@@ -23,7 +23,6 @@ mod tests {
     }
     fn run(&self, c: &RenderCommand) {
       match c {
-        // RenderCommand::Clear => println!("{}: Got a clear command", self.rend_type),
         RenderCommand::Clear => assert_eq!("FakeRend", self.rend_type),
         RenderCommand::DrawTri => assert_eq!("FakeRend", self.rend_type),
         _ => assert!(false, "Got unknown render command"),
@@ -38,6 +37,5 @@ mod tests {
     let com2 = RenderCommand::DrawTri;
     let command_list: Vec<RenderCommand> = vec![com1, com2];
     command_list.iter().for_each(|c| rend.run(c));
-    // assert!(false);
   }
 }
