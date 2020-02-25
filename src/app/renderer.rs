@@ -26,15 +26,17 @@ pub mod api {
     message: *const c_char,
     _: *mut c_void,
   ) {
-    unsafe {
-      let err_text = std::ffi::CStr::from_ptr(message);
-      println!(
-        "Type: {:#x} ID: {:#x} Severity: {:#x}:\n  {:#?}",
-        err_type,
-        id,
-        severity,
-        err_text.to_str().unwrap()
-      )
+    if err_type != 0x8251 {
+      unsafe {
+        let err_text = std::ffi::CStr::from_ptr(message);
+        println!(
+          "Type: {:#x} ID: {:#x} Severity: {:#x}:\n  {:#?}",
+          err_type,
+          id,
+          severity,
+          err_text.to_str().unwrap()
+        )
+      }
     }
   }
 
@@ -42,7 +44,8 @@ pub mod api {
     gl::Enable(gl::BLEND);
     gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
     // gl::Enable(gl::DEPTH_TEST);
-    // TODO: enable debug message callback
+    // TODO: test debug message callback
+    gl::Enable(gl::DEBUG_OUTPUT);
     gl::DebugMessageCallback(Some(debug_callback), std::ptr::null());
     // gl::DebugMessageCallback(std::mem::transmute(debug_callback), std::ptr::null());
   }

@@ -163,7 +163,6 @@ impl Shader {
         _ => return 0,
       }
     }
-    println!("filepath: {}", filename);
     let mut shader_sources_map: ShaderSources = HashMap::with_capacity(4);
     match File::open(filename) {
       Ok(f) => {
@@ -178,13 +177,11 @@ impl Shader {
               match re.captures(&l).and_then(|cap| cap.name("type")) {
                 Some(t) => {
                   if working_on_type {
-                    // println!("{}", shader_source);
                     shader_sources_map.insert(current_shader_type, shader_source);
                     shader_source = "".to_string();
                   }
                   current_shader_type = shader_type(t.as_str());
                   working_on_type = true;
-                  // println!("GLenum type: {} : {} ", t.as_str(), current_shader_type);
                 }
                 _ => {
                   if working_on_type {
@@ -198,7 +195,6 @@ impl Shader {
           }
         }
         if working_on_type {
-          // println!("{}", shader_source);
           shader_sources_map.insert(current_shader_type, shader_source);
         }
       }
